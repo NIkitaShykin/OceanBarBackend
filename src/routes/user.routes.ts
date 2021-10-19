@@ -54,11 +54,11 @@ userRouter.post('/auth', async (ctx: Koa.Context) => {
         email: ctx.request.body.email
     })
     if (!checkUser){
-        ctx.throw(HttpStatus.NOT_FOUND)
+        ctx.throw(HttpStatus.BAD_REQUEST, 'Username or Password is incorrect')
     }
     const isMatch: boolean = await compare(ctx.request.body.password, checkUser.password)
     if(!isMatch){
-        ctx.throw(HttpStatus.BAD_REQUEST, 'Password is incorrect')
+        ctx.throw(HttpStatus.BAD_REQUEST, 'Username or Password is incorrect')
     }
     const token = JWT.sign(
         { userId: checkUser.id },

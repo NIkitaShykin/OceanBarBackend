@@ -9,11 +9,10 @@ app.use(bodyparser())
 app.use(userRouter.routes()).use(userRouter.allowedMethods())
 app.use(menuRouter.routes()).use(menuRouter.allowedMethods())
 
-app.use(async (ctx:Koa.Context, next: () => Promise<any>)=>{
+app.use(async (ctx: Koa.Context, next: () => Promise<any>)=>{
     try {
         await next()
     } catch (error) {
-        console.log('mikita')
         ctx.status = error.statusCode || error.status || HttpStatus.INTERNAL_SERVER_ERROR
         error.status = ctx.status
         ctx.body = { error }

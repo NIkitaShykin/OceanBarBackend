@@ -19,5 +19,4 @@ export default class User {
 
     @Column({nullable: false})
     phone: string
-   
 }

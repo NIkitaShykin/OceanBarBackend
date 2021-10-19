@@ -1,5 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
 
+type dishCategory = 'Плато' | 'Супы' | 'Салаты' | 'Запеченные устрицы' | 'Десерты'
+
 @Entity()
 export default class Dish {
     @PrimaryGeneratedColumn()
@@ -18,23 +20,11 @@ export default class Dish {
     calories: string
 
     @Column({nullable: false})
-    image: string
+    imageURL: string
 
     @Column({nullable: false})
-    ingridients: string
+    ingredients: string
 
-    @Column({type: 'boolean', nullable: false})
-    isSalad: boolean
-
-    @Column({type: 'boolean', nullable: false})
-    isPlato: boolean
-
-    @Column({type: 'boolean', nullable: false})
-    isSoup: boolean
-
-    @Column({type: 'boolean', nullable: false})
-    isOysters: boolean
-
-    @Column({type: 'boolean', nullable: false})
-    isDessert: boolean
+    @Column({nullable: false})
+    dishCategory: dishCategory
 }
