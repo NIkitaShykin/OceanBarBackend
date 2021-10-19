@@ -8,7 +8,7 @@ const routerOpts: Router.IRouterOptions = {
     prefix: '/api/menu'
 }
 const menuRouter: Router = new Router(routerOpts) 
-
+// /api/menu/ get all dishes
 menuRouter.get('/', async (ctx:Koa.Context) => {
     const menuRepo: Repository<Dish> = getRepository(Dish)
     const dishes: Dish[] = await menuRepo.find()
@@ -16,7 +16,7 @@ menuRouter.get('/', async (ctx:Koa.Context) => {
         data: { dishes }
     }
 });
-  
+// /api/menu/:dish_id get one dish
 menuRouter.get('/:dish_id', async (ctx:Koa.Context) => {
     const menuRepo: Repository<Dish> = getRepository(Dish)
     const dish: Dish = await menuRepo.findOne(ctx.params.dish_id)
@@ -27,7 +27,7 @@ menuRouter.get('/:dish_id', async (ctx:Koa.Context) => {
         data: {dish}
     }
 });
-  
+// /api/menu/ create new dish  
 menuRouter.post('/', async (ctx:Koa.Context) => {
     const menuRepo: Repository<Dish> = getRepository(Dish)
     const dish: Dish[] = menuRepo.create(ctx.request.body)
@@ -36,7 +36,7 @@ menuRouter.post('/', async (ctx:Koa.Context) => {
         data: {dish}
     }
 });
-  
+// /api/menu/:dish_id delete dish from DB  
 menuRouter.delete('/:dish_id', async (ctx:Koa.Context) => {
     const menuRepo: Repository<Dish> = getRepository(Dish)
     const dish: Dish = await menuRepo.findOne(ctx.params.dish_id)
@@ -47,7 +47,7 @@ menuRouter.delete('/:dish_id', async (ctx:Koa.Context) => {
 
     ctx.status = HttpStatus.NO_CONTENT
 });
-  
+// /api/menu/:dish_id update dish in DB  
 menuRouter.patch('/:dish_id', async (ctx:Koa.Context) => {
     const menuRepo: Repository<Dish> = getRepository(Dish)
     const dish: Dish = await menuRepo.findOne(ctx.params.dish_id)
