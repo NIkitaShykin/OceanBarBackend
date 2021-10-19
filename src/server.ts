@@ -1,38 +1,9 @@
-import Koa from "koa";
-import bodyParser from "koa-bodyparser";
-import cors from "koa2-cors";
-import logger from "koa-logger";
-import Router from "koa-router";
+require('dotenv').config()
+import app from "./app/app"
+import databaseConnection from "./database/database.connection"
 
-const app = new Koa();
-const router = new Router()
-const PORT = process.env.PORT || 7654;
+const PORT: number = Number(process.env.PORT) || 3000
 
-app.use(bodyParser());
-app.use(
-  cors({
-    origin: "*"
-  })
-);
-app.use(logger());
-
-router.get('/', async(ctx)=>{
-    try {
-        ctx.body = {
-            status: "success",
-        }
-    } catch (err) {
-        console.log(err)
-    }
-})
-app.use(router.routes())
-
-const server = app
-  .listen(PORT, async () => {
-    console.log(`Server listening on port: ${PORT}`);
-  })
-  .on("error", err => {
-    console.error(err);
-  });
-
-export default server;
+databaseConnection
+    .then(() => app.listen(PORT))
+    .catch(console.error)

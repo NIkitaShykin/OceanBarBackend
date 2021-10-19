@@ -1,0 +1,9 @@
+{
+    "extends": "tslint-config-airbnb",
+    "rules": {
+      "import-name": false
+    },
+    "editor.codeActionsOnSave": {
+        "source.fixAll.tslint": true
+    }
+  }
