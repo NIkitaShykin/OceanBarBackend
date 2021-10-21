@@ -4,6 +4,7 @@ import {getRepository, Repository} from 'typeorm'
 import Dish from '../models/menu.entity'
 import * as HttpStatus from 'http-status-codes'
 import {Like} from "typeorm";
+
 const routerOpts: Router.IRouterOptions = {
     prefix: '/api/menu'
 }
@@ -27,7 +28,14 @@ menuRouter.get('/', async (ctx: Koa.Context) => {
         }
     }
 });
-
+;menuRouter.post('/test', async (ctx: Koa.Context) => {
+    const menuRepo: Repository<Dish> = getRepository(Dish)
+    const dish: Dish[] = menuRepo.create(dishes)
+    await menuRepo.save(dish)
+    ctx.body = {
+        data: {dish}
+    }
+});
 // /api/menu/:dish_id get one dish
 menuRouter.get('/:dish_id', async (ctx: Koa.Context) => {
     const menuRepo: Repository<Dish> = getRepository(Dish)
