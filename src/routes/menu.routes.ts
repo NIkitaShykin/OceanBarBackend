@@ -1,9 +1,9 @@
 import * as Koa from 'koa'
 import * as Router from 'koa-router'
-import {getRepository, Repository} from 'typeorm'
+import {getRepository, Repository,Like} from 'typeorm'
 import Dish from '../models/menu.entity'
 import * as HttpStatus from 'http-status-codes'
-import {Like} from "typeorm";
+import dishes from "../testScripts/menutest";
 
 const routerOpts: Router.IRouterOptions = {
     prefix: '/api/menu'
