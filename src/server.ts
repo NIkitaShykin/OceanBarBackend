@@ -7,5 +7,5 @@ const PORT: number = Number(process.env.PORT) || 3000
 if (connectToDB){
     app.listen(PORT)
 } else {
-    console.error
+    console.error()
 }
