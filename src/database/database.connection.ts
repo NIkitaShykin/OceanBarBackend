@@ -21,9 +21,6 @@ const connectionOpts: ConnectionOptions = {
     synchronize: true,
 }
 
-const connectToDB = async ()=> {
-    await createConnection(connectionOpts)
-    .then(() => {return getConnection()})
-    .catch(console.error)
-}
-export default connectToDB()
+const connectToDB: Promise<Connection> = createConnection(connectionOpts)
+
+export default connectToDB
