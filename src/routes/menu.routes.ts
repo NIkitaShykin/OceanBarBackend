@@ -13,7 +13,8 @@ menuRouter.get('/', async (ctx:Koa.Context) => {
     const menuRepo: Repository<Dish> = getRepository(Dish)
     const dishes: Dish[] = await menuRepo.find()
     ctx.body = {
-        data: { dishes }
+        data: { dishes },
+        names: { name: dishes.map((val)=>{ return val.name }) }
     }
 });
 // /api/menu/:dish_id get one dish
