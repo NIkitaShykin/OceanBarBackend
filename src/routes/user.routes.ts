@@ -49,8 +49,7 @@ userRouter.post('/register', async (ctx: Koa.Context) => {
         
         данные вашей учетной записи:
         login: ${ctx.request.body.email}
-        password: ${ctx.request.body.email}
-        
+                
         Данное письмо не требует ответа.`
     }
     mailer(message)
