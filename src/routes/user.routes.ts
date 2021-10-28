@@ -12,7 +12,21 @@ import mailer from "../controllers/mail.controller";
 const routerOpts: Router.IRouterOptions = {
     prefix: '/api/users'
 }
-const userRouter: Router = new Router(routerOpts)
+export const userRouter: Router = new Router(routerOpts)
+const CreateToken = (name: string, secondname: string, email: string, password: string, phone: string) => {
+    let token = JWT.sign(
+        {
+            name,
+            secondname,
+            email,
+            password,
+            phone
+        },
+        process.env.JWT_SECRET,
+        {expiresIn: '10min'}
+    )
+    return token
+}
 // /api/users/ get all users
 userRouter.get('/', async (ctx: Koa.Context) => {
     const userRepo: Repository<User> = getRepository(User)
@@ -32,6 +46,16 @@ userRouter.get('/:user_id', async (ctx: Koa.Context) => {
         data: {user}
     }
 })
+// /api/users/register/token
+userRouter.get('/register/:token', async (ctx: Koa.Context) => {
+    const userRepo: Repository<User> = getRepository(User)
+    const user: any = JWT.verify(ctx.params.token, process.env.JWT_SECRET, function (err: any, decoded: any): any {
+        return decoded
+    });
+    await userRepo.save(user)
+    ctx.redirect('http://localhost:3000/login')
+
+})
 // /api/users/register register ner user
 userRouter.post('/register', async (ctx: Koa.Context) => {
     const userRepo: Repository<User> = getRepository(User)
@@ -40,34 +64,19 @@ userRouter.post('/register', async (ctx: Koa.Context) => {
         ctx.throw(HttpStatus.BAD_REQUEST, 'User already exists')
     }
     ctx.request.body.password = hashSync(ctx.request.body.password, 10)
-    const user: User[] = userRepo.create(ctx.request.body)
-
+    const token = CreateToken(ctx.request.body.name, ctx.request.body.secondname, ctx.request.body.email, ctx.request.body.password, ctx.request.body.phone)
     const message = {
         to: ctx.request.body.email,
-        subject: 'Congratulations! You are successfully register on our site',
-        text: `Поздравляем, Вы успешно зарегистрировались на нашем сайте!
-        
-        данные вашей учетной записи:
-        login: ${ctx.request.body.email}
-                
-        Данное письмо не требует ответа.`
+        subject: 'Welcome to our site!',
+        html: `<div>Поздравляем, Вы почти  зарегистрировались на нашем сайте! </div> 
+            <div>Перейдите по ссылке для подтерждения аккаунта </div>
+            <a href="http://localhost:3001/api/users/register/${token}"> Register me</a>`
     }
     mailer(message)
-    const token = JWT.sign(
-        {
-            name: ctx.request.body.name,
-            secondname: ctx.request.body.secondname,
-            email: ctx.request.body.email,
-            password: ctx.request.body.password,
-            phone: ctx.request.body.phone
-        },
-        process.env.JWT_SECRET,
-        {expiresIn: '10min'}
-    )
-    // await userRepo.save(user)
     ctx.body = {
-        token,
-        data: {user}
+        data: {
+            email :ctx.request.body.email
+        }
     }
 })
 // /api/users/auth authentificate user
@@ -77,11 +86,11 @@ userRouter.post('/auth', async (ctx: Koa.Context) => {
         email: ctx.request.body.email
     })
     if (!checkUser) {
-        ctx.throw(HttpStatus.BAD_REQUEST, 'Username or a is incorrect')
+        ctx.throw(HttpStatus.BAD_REQUEST, 'Username or password is incorrect')
     }
     const isMatch: boolean = await compare(ctx.request.body.password, checkUser.password)
     if (!isMatch) {
-        ctx.throw(HttpStatus.BAD_REQUEST, 'Username or word is incorrect')
+        ctx.throw(HttpStatus.BAD_REQUEST, 'Username or password is incorrect')
     }
     const token = JWT.sign(
         {userId: checkUser.id},
@@ -125,4 +134,3 @@ userRouter.patch('/:user_id', async (ctx) => {
 })
 
 
-export default userRouter
