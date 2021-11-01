@@ -4,7 +4,7 @@ import {getRepository, Repository} from 'typeorm'
 import Dish from '../models/menu.entity'
 import * as HttpStatus from 'http-status-codes'
 import {Like} from "typeorm";
-import {dishCategory} from "../models/menu.entity";
+import dishCategory from "../models/menu.entity";
 
 const routerOpts: Router.IRouterOptions = {
     prefix: '/api/menu'
@@ -15,33 +15,27 @@ menuRouter.get('/', async (ctx: Koa.Context) => {
     const menuRepo: Repository<Dish> = getRepository(Dish)
     const DishName = ctx.request.query.name
     const CategoryName = ctx.request.query.category
+    let dishes: Dish[]
     if (ctx.request.query.name) {
-        const dishes: Dish[] = await menuRepo.find(
+        dishes = await menuRepo.find(
             {
                 name: Like(`%${(DishName as string).toUpperCase()}%`)
             }
         )
-        ctx.body = {
-            data: {dishes}
-        }
     } else if (ctx.request.query.category) {
-        const dishes: Dish[] = await menuRepo.find(
-            {   where:{
+        dishes = await menuRepo.find(
+            {
+                where: {
                     dishCategory: (CategoryName as string).charAt(0).toUpperCase() + (CategoryName as string).slice(1).toLowerCase()
                 }
             }
         )
-        ctx.body = {
-            data: {dishes}
-        }
+    } else {
+        dishes = await menuRepo.find()
     }
-    else {
-        const dishes: Dish[] = await menuRepo.find()
-        ctx.body = {
-            data: {dishes}
-        }
+    ctx.body = {
+        data: {dishes}
     }
-
 
 });
 // /api/menu/:dish_id get one dish

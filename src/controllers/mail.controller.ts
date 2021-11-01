@@ -1,24 +1,28 @@
+import {MessageType} from "../routes/user.routes";
+
 const nodemailer = require('nodemailer')
 
+if (!process.env.MAIL || !process.env.MAIL_PASS){
+    throw new Error('MAIL and MAIL_PASS environment variables are required');
+}
 const transporter = nodemailer.createTransport(
     {
-        host: 'smtp.ethereal.email',
-        port: 587,
+        host: `${process.env.MAIL_HOST}` || 'smtp.gmail.com',
+        port: process.env.MAIL_PORT || 587,
         secure: false, // true for 465, false for other ports
         auth: {
-            user: 'felton.rippin2@ethereal.email',
-            pass: 'b5CGaHtWA5rvdKm6sZ'
+            user: `${process.env.MAIL}`,
+            pass: `${process.env.MAIL_PASS}`
         }
     },
     {
-        from: 'Mailer Test <felton.rippin2@ethereal.email>',
+        from: `Mailer Test <${process.env.MAIL}>`,
     }
 )
 
-const mailer:any = (message:any):any => {
-    transporter.sendMail(message, (err :any, info:any) => {
+const mailer:any = (message:MessageType):void => {
+    transporter.sendMail(message, (err :string, info:string) => {
         if(err) return console.log(err)
-        console.log('Email sent: ', info)
     })
 }
 
