@@ -8,7 +8,11 @@ import * as JWT from 'jsonwebtoken'
 
 require('dotenv').config()
 import mailer from "../controllers/mail.controller";
-
+export type MessageType ={
+    to:string,
+    subject: string,
+    html:string
+}
 const routerOpts: Router.IRouterOptions = {
     prefix: '/api/users'
 }
@@ -49,6 +53,7 @@ userRouter.get('/:user_id', async (ctx: Koa.Context) => {
 // /api/users/register/token
 userRouter.get('/register/:token', async (ctx: Koa.Context) => {
     const userRepo: Repository<User> = getRepository(User)
+    console.log(ctx.res.statusCode)
     const user: any = JWT.verify(ctx.params.token, process.env.JWT_SECRET, function (err: any, decoded: any): any {
         return decoded
     });
@@ -65,7 +70,7 @@ userRouter.post('/register', async (ctx: Koa.Context) => {
     }
     ctx.request.body.password = hashSync(ctx.request.body.password, 10)
     const token = CreateToken(ctx.request.body.name, ctx.request.body.secondname, ctx.request.body.email, ctx.request.body.password, ctx.request.body.phone)
-    const message = {
+    const message : MessageType= {
         to: ctx.request.body.email,
         subject: 'Welcome to our site!',
         html: `<div>Поздравляем, Вы почти  зарегистрировались на нашем сайте! </div> 

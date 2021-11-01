@@ -1,9 +1,14 @@
+import {MessageType} from "../routes/user.routes";
+
 const nodemailer = require('nodemailer')
 
+if (!process.env.MAIL || !process.env.MAIL_PASS){
+    throw new Error('MAIL and MAIL_PASS environment variables are required');
+}
 const transporter = nodemailer.createTransport(
     {
-        host: process.env.MAIL_HOST,
-        port: process.env.MAIL_PORT,
+        host: process.env.MAIL_HOST || 'smtp.gmail.com',
+        port: process.env.MAIL_PORT || 587,
         secure: false, // true for 465, false for other ports
         auth: {
             user: process.env.MAIL,
@@ -15,8 +20,8 @@ const transporter = nodemailer.createTransport(
     }
 )
 
-const mailer:any = (message:any):any => {
-    transporter.sendMail(message, (err :any, info:any) => {
+const mailer:any = (message:MessageType):void => {
+    transporter.sendMail(message, (err :string, info:string) => {
         if(err) return console.log(err)
     })
 }
