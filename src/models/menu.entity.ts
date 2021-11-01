@@ -5,14 +5,14 @@ type dishCategory = 'Плато' | 'Супы' | 'Салаты' | 'Запечен
 @Entity()
 export default class Dish {
     @PrimaryGeneratedColumn()
-    id: number
+    id?: number
 
     @Column({unique: true, nullable: false})
     name: string
 
     @Column({type: 'int', nullable: false})
     price: number
-    
+
     @Column({nullable: false })
     weight: string
 

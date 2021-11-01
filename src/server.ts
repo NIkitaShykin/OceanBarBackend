@@ -4,8 +4,6 @@ import connectToDB from "./database/database.connection"
 
 const PORT: number = Number(process.env.PORT) || 3000
 
-if (connectToDB){
-    app.listen(PORT)
-} else {
-    console.error
-}
+connectToDB
+    .then(() => app.listen(PORT))
+    .catch(console.error)

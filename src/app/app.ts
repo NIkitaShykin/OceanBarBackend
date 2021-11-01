@@ -1,10 +1,12 @@
 import * as Koa from 'koa'
 import * as HttpStatus from 'http-status-codes'
 import * as bodyparser from 'koa-bodyparser'
+import * as cors from '@koa/cors'
 import menuRouter from '../routes/menu.routes'
-import userRouter from '../routes/user.routes'
+import {userRouter} from '../routes/user.routes'
 
 const app: Koa = new Koa()
+app.use(cors())
 app.use(bodyparser())
 app.use(userRouter.routes()).use(userRouter.allowedMethods())
 app.use(menuRouter.routes()).use(menuRouter.allowedMethods())
