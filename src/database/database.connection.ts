@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 require('dotenv').config()
-import{ getConnection, createConnection, Connection, ConnectionOptions } from 'typeorm'
+import{ createConnection, Connection, ConnectionOptions } from 'typeorm'
 import Dish from '../models/menu.entity'
 import User from '../models/user.entity'
 
