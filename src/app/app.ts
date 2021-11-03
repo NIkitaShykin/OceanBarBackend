@@ -13,7 +13,6 @@ app.use(menuRouter.routes()).use(menuRouter.allowedMethods())
 
 app.use(async (ctx: Koa.Context, next: () => Promise<any>)=>{
     try {
-        console.log(ctx.URL)
         await next()
     } catch (error) {
         ctx.status = error.statusCode || error.status || HttpStatus.INTERNAL_SERVER_ERROR

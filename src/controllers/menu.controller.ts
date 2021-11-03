@@ -2,34 +2,30 @@ import * as Koa from 'koa'
 import {getRepository, Repository} from 'typeorm'
 import Dish from '../models/menu.entity'
 import * as HttpStatus from 'http-status-codes'
-import {Like} from "typeorm";
+import {Like, FindOperator} from "typeorm";
+
+type MenuCondition = {
+    name?: FindOperator<string>,
+    where?:  {
+        dishCategory?: string,
+    }
+}
+
+function capitalize(value: string): string {
+    value = value.trim()
+    return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()
+}
 
 export default class MenuController {
 
     static async getMenu(ctx: Koa.Context): Promise<void> {
         const menuRepo: Repository<Dish> = getRepository(Dish)
-        const DishName = ctx.request.query.name
-        const CategoryName = ctx.request.query.category
-        let dishes: Dish[]
-        if (ctx.request.query.name) {
-            dishes = await menuRepo.find(
-                {
-                    name: Like(`%${(DishName as string).toUpperCase()}%`)
-                }
-            )
-        } else if (ctx.request.query.category) {
-            dishes = await menuRepo.find(
-                {
-                    where: {
-                        dishCategory: (CategoryName as string).charAt(0).toUpperCase() + (CategoryName as string).slice(1).toLowerCase()
-                    }
-                }
-            )
-        } else {
-            dishes = await menuRepo.find()
-        }
+        let condition: MenuCondition = {}
+        if (ctx.request.query.name) condition.name = Like(`%${ctx.request.query.name.toString().toUpperCase()}%`)
+        if (ctx.request.query.category) condition.where = {dishCategory: capitalize(ctx.request.query.category.toString())}
+        const dishes: Dish[] = await menuRepo.find(condition)
         ctx.body = {
-            data: {dishes}
+            data: {dishes},
         }
     }
 
