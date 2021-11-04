@@ -11,7 +11,6 @@ export default class CartController {
         const cartRepo: Repository<CartPosition> = getRepository(CartPosition)
         const userRepo: Repository<User> = getRepository(User)
         const orderRepo: Repository<Order> = getRepository(Order)
-        const menuRepo: Repository<Dish> = getRepository(Dish)
 
         const user: User = await userRepo.findOne(ctx.params.user_id)
         let order: Order = await orderRepo.findOne({
@@ -73,7 +72,6 @@ export default class CartController {
         const cartRepo: Repository<CartPosition> = getRepository(CartPosition)
         const userRepo: Repository<User> = getRepository(User)
         const orderRepo: Repository<Order> = getRepository(Order)
-        const menuRepo: Repository<Dish> = getRepository(Dish)
 
         const user: User = await userRepo.findOne(ctx.params.user_id)
         let order: Order = await orderRepo.findOne({
@@ -94,7 +92,6 @@ export default class CartController {
         const cartRepo: Repository<CartPosition> = getRepository(CartPosition)
         const userRepo: Repository<User> = getRepository(User)
         const orderRepo: Repository<Order> = getRepository(Order)
-        const menuRepo: Repository<Dish> = getRepository(Dish)
 
         const user: User = await userRepo.findOne(ctx.params.user_id)
         let order: Order = await orderRepo.findOne({
@@ -123,7 +120,6 @@ export default class CartController {
         const cartRepo: Repository<CartPosition> = getRepository(CartPosition)
         const userRepo: Repository<User> = getRepository(User)
         const orderRepo: Repository<Order> = getRepository(Order)
-        const menuRepo: Repository<Dish> = getRepository(Dish)
 
         const user: User = await userRepo.findOne(ctx.params.user_id)
         let order: Order = await orderRepo.findOne({
