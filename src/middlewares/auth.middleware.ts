@@ -11,13 +11,22 @@ export default async function (ctx: Koa.Context, next: Koa.Next) {
                 message: 'Пользователь не авторизован'
             }
         }
-        const decodedData: string | JWT.JwtPayload = JWT.verify(token, process.env.JWT_SECRET)
+        const user: any = JWT.verify(token, process.env.JWT_SECRET, function (err: any, decoded: any): any {
+            return decoded
+        });
+        ctx.params.user_id = user.userId
         await next()
     } catch(error) {
-        ctx.body = {
-            status: '403',
-            message: 'Пользователь не авторизован',
-            error: error
-        }
+        if (error) {
+            ctx.body = {
+                error: error
+            }
+        } else {
+            ctx.body = {
+                error: {
+                    status: '403',
+                    message: 'Пользователь не авторизован',
+                }
+        }}
     }
 }

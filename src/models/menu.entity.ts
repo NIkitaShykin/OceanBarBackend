@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
+import CartPosition from "./cart.entity"
 
 type dishCategory = 'Плато' | 'Супы' | 'Салаты' | 'Запеченные устрицы' | 'Десерты'
 
@@ -27,4 +28,7 @@ export default class Dish {
 
     @Column({nullable: false})
     dishCategory: dishCategory
+
+    @OneToMany(() => CartPosition, cart => cart.dish)
+    cartPositions?: CartPosition[]
 }

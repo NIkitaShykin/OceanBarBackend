@@ -1,7 +1,9 @@
 import 'reflect-metadata'
 require('dotenv').config()
 import{ createConnection, Connection, ConnectionOptions } from 'typeorm'
+import CartPosition from '../models/cart.entity'
 import Dish from '../models/menu.entity'
+import Order from '../models/order.entity'
 import User from '../models/user.entity'
 
 if (!process.env.DB_USERNAME || !process.env.DB_PASSWORD){
@@ -16,7 +18,7 @@ const connectionOpts: ConnectionOptions = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME || 'oceanbardb',
     entities: [
-        Dish, User
+        Dish, User, CartPosition, Order
     ],
     synchronize: true,
 }
