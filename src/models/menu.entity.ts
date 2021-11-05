@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from "typeorm"
 import CartPosition from "./cart.entity"
+import Order from "./order.entity"
 
 type dishCategory = 'Плато' | 'Супы' | 'Салаты' | 'Запеченные устрицы' | 'Десерты'
 
@@ -31,4 +32,7 @@ export default class Dish {
 
     @OneToMany(() => CartPosition, cart => cart.dish)
     cartPositions?: CartPosition[]
+
+    @ManyToOne(() => Order, order => order.dishes)
+    order: Order
 }

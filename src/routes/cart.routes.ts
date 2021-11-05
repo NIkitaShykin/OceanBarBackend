@@ -15,7 +15,7 @@ cartRouter.post('/', authMiddleware, CartController.addDishToCart)
 cartRouter.delete('/:pos_id', authMiddleware, CartController.deleteDishFromCard)
 // /api/cart/ delete full cart and order for user
 cartRouter.delete('/', authMiddleware, CartController.deleteCart)
-// /api/cart/:pos_id updatesChoosed position
+// /api/cart/:pos_id updates chosen position
 cartRouter.patch('/:pos_id', authMiddleware, CartController.updatePosition)
 
 export default cartRouter

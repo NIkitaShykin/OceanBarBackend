@@ -14,8 +14,8 @@ export default class CartPosition {
     @Column()
     quantity: number
 
-    @ManyToOne(()=> Order, order => order.cartPositions)
-    order?: Order
+/*     @ManyToOne(()=> Order, order => order.cartPositions)
+    order?: Order */
 
     @ManyToOne(()=> Dish, dish => dish.cartPositions)
     dish?: Dish
