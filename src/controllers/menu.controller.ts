@@ -32,9 +32,8 @@ export default class MenuController {
     static async getDish(ctx:Koa.Context): Promise<void> {
         const menuRepo: Repository<Dish> = getRepository(Dish)
         const dish: Dish = await menuRepo.findOne(ctx.params.dish_id)
-        if (!dish) {
-            ctx.throw(HttpStatus.NOT_FOUND)
-        }
+        if (!dish) ctx.throw(HttpStatus.NOT_FOUND)
+
         ctx.body = {
             data: {dish}
         }
@@ -52,9 +51,8 @@ export default class MenuController {
     static async deleteDish(ctx: Koa.Context): Promise<void> {
         const menuRepo: Repository<Dish> = getRepository(Dish)
         const dish: Dish = await menuRepo.findOne(ctx.params.dish_id)
-        if (!dish) {
-            ctx.throw(HttpStatus.NOT_FOUND)
-        }
+        if (!dish) ctx.throw(HttpStatus.NOT_FOUND)
+
         await menuRepo.delete(dish)
     
         ctx.status = HttpStatus.NO_CONTENT
@@ -63,9 +61,7 @@ export default class MenuController {
     static async updateDish(ctx: Koa.Context): Promise<void> {
         const menuRepo: Repository<Dish> = getRepository(Dish)
         const dish: Dish = await menuRepo.findOne(ctx.params.dish_id)
-        if (!dish) {
-            ctx.throw(HttpStatus.NOT_FOUND)
-        }
+        if (!dish) ctx.throw(HttpStatus.NOT_FOUND)
     
         const updatedDish: Dish = await menuRepo.merge(dish, ctx.request.body)
     

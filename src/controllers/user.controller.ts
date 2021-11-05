@@ -26,9 +26,7 @@ export default class UserController {
     static async getUser(ctx: Koa.Context) {
         const userRepo: Repository<User> = getRepository(User)
         const user: User = await userRepo.findOne(ctx.params.user_id)
-        if (!user) {
-            ctx.throw(HttpStatus.NOT_FOUND)
-        }
+        if (!user) ctx.throw(HttpStatus.NOT_FOUND)
         ctx.body = {
             data: {user}
         }
@@ -37,9 +35,8 @@ export default class UserController {
     static async registerUser(ctx: Koa.Context) {
         const userRepo: Repository<User> = getRepository(User)
         const checkUser: User = await userRepo.findOne({email: ctx.request.body.email})
-        if (checkUser) {
-            ctx.throw(HttpStatus.BAD_REQUEST, 'User already exists')
-        }
+        if (checkUser) ctx.throw(HttpStatus.BAD_REQUEST, 'User already exists')
+
         ctx.request.body.password = hashSync(ctx.request.body.password, 10)
         const token: string | string[] = ctx.query.token
         const message: MessageType= {
@@ -62,13 +59,10 @@ export default class UserController {
         const checkUser: User = await userRepo.findOne({
             email: ctx.request.body.email
         })
-        if (!checkUser) {
-            ctx.throw(HttpStatus.BAD_REQUEST, 'Username or password is incorrect')
-        }
+        if (!checkUser) ctx.throw(HttpStatus.BAD_REQUEST, 'Username or password is incorrect')
         const isMatch: boolean = await compare(ctx.request.body.password, checkUser.password)
-        if (!isMatch) {
-            ctx.throw(HttpStatus.BAD_REQUEST, 'Username or password is incorrect')
-        }
+        if (!isMatch) ctx.throw(HttpStatus.BAD_REQUEST, 'Username or password is incorrect')
+
         const token = JWT.sign(
             {userId: checkUser.id},
             process.env.JWT_SECRET,
@@ -85,9 +79,7 @@ export default class UserController {
     static async deleteUser(ctx: Koa.Context) {
         const menuRepo: Repository<User> = getRepository(User)
         const user: User = await menuRepo.findOne(ctx.params.user_id)
-        if (!user) {
-            ctx.throw(HttpStatus.NOT_FOUND)
-        }
+        if (!user) ctx.throw(HttpStatus.NOT_FOUND)
         await menuRepo.delete(user)
     
         ctx.body = {
@@ -98,9 +90,8 @@ export default class UserController {
     static async updateUser(ctx: Koa.Context) {
         const userRepo: Repository<User> = getRepository(User)
         const user: User = await userRepo.findOne(ctx.params.user_id)
-        if (!user) {
-            ctx.throw(HttpStatus.NOT_FOUND)
-        }
+        if (!user) ctx.throw(HttpStatus.NOT_FOUND)
+        
         const updatedUser: User = await userRepo.merge(user, ctx.request.body)
         updatedUser.password = hashSync(updatedUser.password, 10)
         userRepo.save(updatedUser)
@@ -112,7 +103,6 @@ export default class UserController {
 
     static async saveUser(ctx: Koa.Context) {
         const userRepo: Repository<User> = getRepository(User)
-        /// ?????
         const user: any = JWT.verify(ctx.params.token, process.env.JWT_SECRET, function (err: any, decoded: User): User {
             return decoded
         });
