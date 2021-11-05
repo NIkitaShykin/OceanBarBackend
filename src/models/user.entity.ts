@@ -22,6 +22,21 @@ export default class User {
     @Column({nullable: false})
     phone: string
 
+    @Column()
+    city?: string
+
+    @Column()
+    street?: string
+
+    @Column()
+    homeNumber?: string
+
+    @Column()
+    homePart?: string
+
+    @Column()
+    flat?: string
+    
     @OneToMany(() => CartPosition, cart => cart.user)
     cart?: CartPosition[]
 

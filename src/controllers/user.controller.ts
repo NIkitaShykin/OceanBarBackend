@@ -91,7 +91,7 @@ export default class UserController {
         const userRepo: Repository<User> = getRepository(User)
         const user: User = await userRepo.findOne(ctx.params.user_id)
         if (!user) ctx.throw(HttpStatus.NOT_FOUND)
-        
+        if (!ctx.request.body.city) ctx.request.body.city = 'г. Минск'
         const updatedUser: User = await userRepo.merge(user, ctx.request.body)
         updatedUser.password = hashSync(updatedUser.password, 10)
         userRepo.save(updatedUser)
@@ -111,4 +111,5 @@ export default class UserController {
             data: user
         }
     }
+
 }
