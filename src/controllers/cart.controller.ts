@@ -8,11 +8,10 @@ import Dish from '../models/menu.entity'
 export default class CartController {
     static async getCart(ctx: Koa.Context){
         const cartRepo: Repository<CartPosition> = getRepository(CartPosition)
-        const userRepo: Repository<User> = getRepository(User)
 
         let cart: CartPosition[] = await cartRepo.find({
             where: {
-                user: await userRepo.findOne(ctx.params.user_id),
+                user: ctx.params.user_id,
             },
             relations: ['dish'],
         })
