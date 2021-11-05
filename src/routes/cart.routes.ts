@@ -12,12 +12,10 @@ cartRouter.get('/', authMiddleware, CartController.getCart)
 // /api/cart/ add dish to the cart (also creates new order if needed)
 cartRouter.post('/', authMiddleware, CartController.addDishToCart)
 // /api/cart/:pos_id delete position from cart, if it's last position also deletes order
-cartRouter.delete('/:pos_id', authMiddleware, CartController.DeleteDishFromCard)
+cartRouter.delete('/:pos_id', authMiddleware, CartController.deleteDishFromCard)
 // /api/cart/ delete full cart and order for user
-cartRouter.delete('/', authMiddleware, CartController.DeleteCart)
+cartRouter.delete('/', authMiddleware, CartController.deleteCart)
 // /api/cart/:pos_id updatesChoosed position
-cartRouter.patch('/:pos_id', authMiddleware, CartController.UpdatePosition)
-// /api/cart/sendOrder need to implement, endoint so set next status of order
-cartRouter.post('/sendOrder', authMiddleware)
+cartRouter.patch('/:pos_id', authMiddleware, CartController.updatePosition)
 
 export default cartRouter

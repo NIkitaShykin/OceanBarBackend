@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
 import Order from "./order.entity"
+import CartPosition from "./cart.entity"
 
 @Entity()
 export default class User {
@@ -20,6 +21,9 @@ export default class User {
 
     @Column({nullable: false})
     phone: string
+
+    @OneToMany(() => CartPosition, cart => cart.user)
+    cart?: CartPosition[]
 
     @OneToMany(() => Order, order => order.user)
     orders?: Order[]

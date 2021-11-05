@@ -15,18 +15,12 @@ export default async function (ctx: Koa.Context, next: Koa.Next) {
             return decoded
         });
         ctx.params.user_id = user.userId
-        await next()
     } catch(error) {
-        if (error) {
-            ctx.body = {
-                error: error
-            }
-        } else {
-            ctx.body = {
-                error: {
-                    status: '403',
-                    message: 'Пользователь не авторизован',
-                }
-        }}
+        ctx.body = {
+            status: '403',
+            message: 'Пользователь не авторизован',
+            error: error
+        }
     }
+    await next()
 }
