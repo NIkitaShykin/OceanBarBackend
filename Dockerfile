@@ -7,5 +7,9 @@ COPY .  /app/
 RUN npm run build
 
 FROM builder as development
-EXPOSE 3000
+RUN mkdir -p /app
+WORKDIR /app
+COPY package*.json /app/
+RUN npm install --only=production
+COPY /dist /app/
 CMD [ "npm", "run", "start"]
