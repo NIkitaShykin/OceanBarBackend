@@ -1,3 +1,7 @@
 node_modules
 .git
 Dockerfile
+.gitignore
+.github
+nodemon.json
+.env*
