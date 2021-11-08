@@ -70,8 +70,7 @@ export default class UserController {
         )
     
         ctx.body = {
-            token,
-            data: checkUser,
+            token
         }
     
     }

@@ -11,7 +11,12 @@ export default async function(ctx: Koa.Context, next: Koa.Next) {
             secondname: ctx.request.body.secondname,
             email: ctx.request.body.email,
             password: hashSync(ctx.request.body.password, 10),
-            phone: ctx.request.body.phone
+            phone: ctx.request.body.phone,
+            city: '',
+            flat: '',
+            homeNumber: '',
+            homePart: '',
+            street: ""
         } 
         ctx.query.token = JWT.sign(
             user,
