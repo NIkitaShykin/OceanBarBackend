@@ -22,19 +22,19 @@ export default class User {
     @Column({nullable: false})
     phone: string
 
-    @Column()
+    @Column({nullable: true})
     city?: string
 
-    @Column()
+    @Column({nullable: true})
     street?: string
 
-    @Column()
+    @Column({nullable: true})
     homeNumber?: string
 
-    @Column()
+    @Column({nullable: true})
     homePart?: string
 
-    @Column()
+    @Column({nullable: true})
     flat?: string
     
     @OneToMany(() => CartPosition, cart => cart.user)
