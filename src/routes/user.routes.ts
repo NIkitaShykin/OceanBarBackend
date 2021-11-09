@@ -9,11 +9,11 @@ const routerOpts: Router.IRouterOptions = {
 }
 const userRouter: Router = new Router(routerOpts)
 // /api/users/ get all users
-userRouter.get('/', authMiddleware, UserController.getUsers)
+userRouter.get('/', authMiddleware ,UserController.getUsers)
 // /api/users/:user_id get one user
 userRouter.get('/:user_id', authMiddleware, UserController.getUser)
 // /api/users/register/token
-userRouter.get('/register/:token', UserController.saveUser)
+userRouter.post('/register/:token', UserController.saveUser)
 // /api/users/register register ner user
 userRouter.post('/register', registerMiddleware, UserController.registerUser)
 // /api/users/auth authentificate user
