@@ -13,7 +13,7 @@ userRouter.get('/', authMiddleware ,UserController.getUsers)
 // /api/users/:user_id get one user
 userRouter.get('/:user_id', authMiddleware, UserController.getUser)
 // /api/users/register/token
-userRouter.post('/register/:token', UserController.saveUser)
+userRouter.get('/register/:token', UserController.saveUser)
 // /api/users/register register ner user
 userRouter.post('/register', registerMiddleware, UserController.registerUser)
 // /api/users/auth authentificate user
