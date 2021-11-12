@@ -8,19 +8,19 @@ export default class User {
     id?: number
 
     @Column({nullable: false})
-    name: string
+    name?: string
 
     @Column({nullable: false})
-    secondname: string
+    secondname?: string
 
     @Column({unique: true ,nullable: false})
-    email: string
+    email?: string
 
     @Column({nullable: false})
-    password: string
+    password?: string
 
     @Column({nullable: false})
-    phone: string
+    phone?: string
 
     @Column({nullable: true})
     city?: string
@@ -37,9 +37,9 @@ export default class User {
     @Column({nullable: true})
     flat?: string
     
-    @OneToMany(() => CartPosition, cart => cart.user)
+    @OneToMany(() => CartPosition, cart => cart.user, {cascade: true, onDelete: 'CASCADE'})
     cart?: CartPosition[]
 
-    @OneToMany(() => Order, order => order.user)
+    @OneToMany(() => Order, order => order.user, {cascade: true, onDelete: 'CASCADE'})
     orders?: Order[]
 }
