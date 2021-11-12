@@ -1,13 +1,16 @@
 import 'reflect-metadata'
-require('dotenv').config()
-import{ createConnection, Connection, ConnectionOptions } from 'typeorm'
+import {Connection, ConnectionOptions, createConnection} from 'typeorm'
 import CartPosition from '../models/cart.entity'
 import Dish from '../models/menu.entity'
 import Order from '../models/order.entity'
 import User from '../models/user.entity'
+import Tables from "../models/tables.entity";
+import Booking from "../models/booking.entity";
 
-if (!process.env.DB_USERNAME || !process.env.DB_PASSWORD){
-    throw new Error('DB_USERNAME and DB_PASSWORD environment variables are required');   
+require('dotenv').config()
+
+if (!process.env.DB_USERNAME || !process.env.DB_PASSWORD) {
+    throw new Error('DB_USERNAME and DB_PASSWORD environment variables are required');
 }
 
 const connectionOpts: ConnectionOptions = {
@@ -18,7 +21,7 @@ const connectionOpts: ConnectionOptions = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME || 'oceanbardb',
     entities: [
-        Dish, User, CartPosition, Order
+        Dish, User, CartPosition, Order, Tables, Booking
     ],
     synchronize: true,
 }
