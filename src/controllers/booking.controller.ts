@@ -4,12 +4,99 @@ import {getRepository, Repository} from 'typeorm'
 import Tables from "../models/tables.entity";
 import Booking from "../models/booking.entity";
 
+
 export default class BookingController {
     static async getBooking(ctx: Koa.Context) {
+        const timeArray: string[] = [
+            '10:00', '10:30',
+            '11:00', '11:30',
+            '12:00', '12:30',
+            '13:00', '13:30',
+            '14:00', '14:30',
+            '15:00', '15:30',
+            '16:00', '16:30',
+            '17:00', '17:30',
+            '18:00', '18:30',
+            '19:00', '19:30',
+            '20:00', '20:30',
+            '21:00'
+        ]
         const bookingRepo: Repository<Booking> = getRepository(Booking)
-        let date = await bookingRepo.find()
+        let booked: Booking[] = await bookingRepo.find({
+            where: {
+                date: ctx.request.query.date
+            }
+        })
+        const tables: Repository<Tables> = getRepository(Tables)
+        let amounts = await tables.find()
+        let newArr:string[]
+        let notAllowedArr: Booking[] = []
+        switch (ctx.request.query.index) {
+            case '0':
+                newArr = [...timeArray]
+                booked.forEach((el: any) => {
+                    if (el.forTwoPersons > amounts[0].maxamount) {
+                        notAllowedArr.push(el)
+                    }
+                })
+                notAllowedArr.forEach((el: any) => {
+                        delete newArr[newArr.indexOf(`${el.time}`)]
+                    }
+                )
+                break;
+            case '1':
+                newArr = [...timeArray]
+                booked.forEach((el: any) => {
+                    if (el.forFourPersons > amounts[1].maxamount) {
+                        notAllowedArr.push(el)
+                    }
+                })
+                notAllowedArr.forEach((el: any) => {
+                        delete newArr[newArr.indexOf(`${el.time}`)]
+                    }
+                )
+                break;
+            case '2':
+                newArr = [...timeArray]
+                booked.forEach((el: any) => {
+                    if (el.forSixPersons > amounts[2].maxamount) {
+                        notAllowedArr.push(el)
+                    }
+                })
+                notAllowedArr.forEach((el: any) => {
+                        delete newArr[newArr.indexOf(`${el.time}`)]
+                    }
+                )
+                break;
+            case '3':
+                newArr = [...timeArray]
+                booked.forEach((el: any) => {
+                    if (el.forEighthPersons > amounts[3].maxamount) {
+                        notAllowedArr.push(el)
+                    }
+                })
+                notAllowedArr.forEach((el: any) => {
+                        delete newArr[newArr.indexOf(`${el.time}`)]
+                    }
+                )
+                break;
+            case '4':
+                newArr = [...timeArray]
+                booked.forEach((el: any) => {
+                    if (el.forTenPersons > amounts[4].maxamount) {
+                        notAllowedArr.push(el)
+                    }
+                })
+                notAllowedArr.forEach((el: any) => {
+                        delete newArr[newArr.indexOf(`${el.time}`)]
+                    }
+                )
+                break;
+            default:
+                throw ctx.throw(HttpStatus.BAD_REQUEST, 'такого кол-ва гостей не сущетсвует ')
+        }
         ctx.body = {
-            data: date
+            data: newArr
         }
     }
 
@@ -22,18 +109,16 @@ export default class BookingController {
                 time: ctx.request.body.time
             }
         })
+        console.log(booked)
         let booking
+        let updateBooked: Booking
         if (!booked) {
             booking = bookingRepo.create(ctx.request.body)
             await bookingRepo.save(booking)
         } else {
-            let amounts = await tables.find()
-            let updateBooked: Booking
+                let updateBooked: Booking
             switch (ctx.request.query.index) {
                 case '0':
-                    if (ctx.request.body.forTwoPersons + booked.forTwoPersons > amounts[0].maxamount) {
-                        ctx.throw(HttpStatus.BAD_REQUEST, 'Больше столов нет')
-                    }
                     updateBooked = {
                         date: ctx.request.body.date,
                         time: ctx.request.body.time,
@@ -41,9 +126,6 @@ export default class BookingController {
                     }
                     break;
                 case '1':
-                    if (ctx.request.body.forTwoPersons + booked.forTwoPersons > amounts[1].maxamount) {
-                        ctx.throw(HttpStatus.BAD_REQUEST, 'Больше столов нет')
-                    }
                     updateBooked = {
                         date: ctx.request.body.date,
                         time: ctx.request.body.time,
@@ -51,9 +133,6 @@ export default class BookingController {
                     }
                     break;
                 case '2':
-                    if (ctx.request.body.forTwoPersons + booked.forTwoPersons > amounts[2].maxamount) {
-                        ctx.throw(HttpStatus.BAD_REQUEST, 'Больше столов нет')
-                    }
                     updateBooked = {
                         date: ctx.request.body.date,
                         time: ctx.request.body.time,
@@ -61,9 +140,6 @@ export default class BookingController {
                     }
                     break;
                 case '3':
-                    if (ctx.request.body.forTwoPersons + booked.forTwoPersons > amounts[3].maxamount) {
-                        ctx.throw(HttpStatus.BAD_REQUEST, 'Больше столов нет')
-                    }
                     updateBooked = {
                         date: ctx.request.body.date,
                         time: ctx.request.body.time,
@@ -71,9 +147,6 @@ export default class BookingController {
                     }
                     break;
                 case '4':
-                    if (ctx.request.body.forTwoPersons + booked.forTwoPersons > amounts[4].maxamount) {
-                        ctx.throw(HttpStatus.BAD_REQUEST, 'Больше столов нет')
-                    }
                     updateBooked = {
                         date: ctx.request.body.date,
                         time: ctx.request.body.time,
