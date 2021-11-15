@@ -7,20 +7,29 @@ export default class User {
     @PrimaryGeneratedColumn()
     id?: number
 
-    @Column({nullable: false})
-    name: string
+    @Column({nullable: true})
+    refreshToken?: string
+
+    @Column({type:"boolean", nullable: true, default: false})
+    isActivated?: boolean
+
+    @Column({nullable: true})
+    activationLink?: string
 
     @Column({nullable: false})
-    secondname: string
+    name?: string
+
+    @Column({nullable: false})
+    secondname?: string
 
     @Column({unique: true ,nullable: false})
-    email: string
+    email?: string
 
     @Column({nullable: false})
-    password: string
+    password?: string
 
     @Column({nullable: false})
-    phone: string
+    phone?: string
 
     @Column({nullable: true})
     city?: string
