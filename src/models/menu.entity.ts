@@ -33,6 +33,6 @@ export default class Dish {
     @OneToMany(() => CartPosition, cart => cart.dish)
     cartPositions?: CartPosition[]
 
-    @ManyToOne(() => Order, order => order.dishes, {cascade: true, onDelete: 'CASCADE'})
+    @ManyToOne(() => Order, order => order.dishes, {cascade: true, onDelete: 'SET NULL'})
     order: Order
 }

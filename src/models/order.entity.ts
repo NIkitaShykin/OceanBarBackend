@@ -14,8 +14,7 @@ export default class Order {
     price?: number
 
     @Column({nullable: true})
-    state?: string
-    // state?: orderState
+    state?: orderState
 
     @ManyToOne(() => User, user => user.orders)
     user?: User
@@ -24,8 +23,7 @@ export default class Order {
     dishes?: Dish[]
 
     @Column({nullable: true})
-    type?: string
-    // type?: orderType
+    type?: orderType
 
     @Column({nullable: true})
     date?: string

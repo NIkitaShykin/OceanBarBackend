@@ -22,19 +22,7 @@ export default class OrderController {
       return current.dish
     })
 
-    const currrentOrder: Order = await orderRepo.findOne({
-      where: {
-        user: ctx.params.user_id,
-      }
-    })
-
-    if (currrentOrder) {
-      await orderRepo.delete({
-        user: ctx.params.user_id,
-      })
-    }
-
-    const order: Order = await orderRepo.create({
+    const order: Order = orderRepo.create({
       dishes: dishes,
       state: ctx.request.body.state,
       type: ctx.request.body.type,
@@ -74,7 +62,6 @@ export default class OrderController {
 
     const order: Order = await orderRepo.findOne({
       where: {
-        user: ctx.params.user_id,
         id: ctx.params.order_id
       },
       relations: ['user', 'dishes'],
@@ -89,7 +76,6 @@ export default class OrderController {
     }
   }
 
-  // *** to be implemented further / having issues with delete option
   static async deleteOrder(ctx: Koa.Context) {
     const orderRepo: Repository<Order> = getRepository(Order)
 
@@ -100,17 +86,9 @@ export default class OrderController {
       relations: ['user', 'dishes'],
     })
 
-    // const cancelledOrder: Order = {
-    //   dishes: [],
-    //   user: {}
-    // }
-
     if (!order) {
       ctx.throw(HttpStatus.NOT_FOUND)
     }
-
-    // order = await orderRepo.merge(order, cancelledOrder)
-    // await orderRepo.save(order)
 
     await orderRepo.delete(ctx.params.order_id)
 
