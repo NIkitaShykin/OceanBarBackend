@@ -13,6 +13,7 @@ export default async function (ctx: Koa.Context, next: Koa.Next) {
         const user: any = JWT.verify(token, process.env.JWT_SECRET, function (err: any, decoded: any): any {
             return decoded
         })
+        if (!user) ctx.throw(HttpStatus.UNAUTHORIZED, 'Your token expired')
         const userRepo: Repository<User> = getRepository(User)
         const checkUser = await userRepo.findOne(user.userId)
         if(!checkUser) ctx.throw(HttpStatus.NOT_FOUND, 'User not found')
