@@ -93,7 +93,7 @@ export default class UserController {
         if (!user) ctx.throw(HttpStatus.NOT_FOUND)
         if (!ctx.request.body.city) ctx.request.body.city = 'г. Минск'
         const updatedUser: User = await userRepo.merge(user, ctx.request.body)
-        updatedUser.password = hashSync(updatedUser.password, 10)
+        if (ctx.request.body.password) updatedUser.password = hashSync(ctx.request.body.password, 10)
         userRepo.save(updatedUser)
     
         ctx.body = {
@@ -107,6 +107,7 @@ export default class UserController {
             return decoded
         });
         await userRepo.save(user)
+        ctx.redirect(`${process.env.CLIENT_URL}login`)
         ctx.body = {
             data: user
         }
