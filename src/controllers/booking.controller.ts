@@ -31,63 +31,59 @@ export default class BookingController {
         let amounts = await tables.find()
         let newArr:string[]
         let notAllowedArr: Booking[] = []
+        newArr = [...timeArray]
         switch (ctx.request.query.index) {
             case '0':
-                newArr = [...timeArray]
-                booked.forEach((el: any) => {
+                booked.forEach((el) => {
                     if (el.forTwoPersons > amounts[0].maxamount) {
                         notAllowedArr.push(el)
                     }
                 })
-                notAllowedArr.forEach((el: any) => {
+                notAllowedArr.forEach((el) => {
                         delete newArr[newArr.indexOf(`${el.time}`)]
                     }
                 )
                 break;
             case '1':
-                newArr = [...timeArray]
-                booked.forEach((el: any) => {
+                booked.forEach((el) => {
                     if (el.forFourPersons > amounts[1].maxamount) {
                         notAllowedArr.push(el)
                     }
                 })
-                notAllowedArr.forEach((el: any) => {
+                notAllowedArr.forEach((el) => {
                         delete newArr[newArr.indexOf(`${el.time}`)]
                     }
                 )
                 break;
             case '2':
-                newArr = [...timeArray]
-                booked.forEach((el: any) => {
+                booked.forEach((el) => {
                     if (el.forSixPersons > amounts[2].maxamount) {
                         notAllowedArr.push(el)
                     }
                 })
-                notAllowedArr.forEach((el: any) => {
+                notAllowedArr.forEach((el) => {
                         delete newArr[newArr.indexOf(`${el.time}`)]
                     }
                 )
                 break;
             case '3':
-                newArr = [...timeArray]
-                booked.forEach((el: any) => {
+                booked.forEach((el) => {
                     if (el.forEighthPersons > amounts[3].maxamount) {
                         notAllowedArr.push(el)
                     }
                 })
-                notAllowedArr.forEach((el: any) => {
+                notAllowedArr.forEach((el) => {
                         delete newArr[newArr.indexOf(`${el.time}`)]
                     }
                 )
                 break;
             case '4':
-                newArr = [...timeArray]
-                booked.forEach((el: any) => {
+                booked.forEach((el) => {
                     if (el.forTenPersons > amounts[4].maxamount) {
                         notAllowedArr.push(el)
                     }
                 })
-                notAllowedArr.forEach((el: any) => {
+                notAllowedArr.forEach((el) => {
                         delete newArr[newArr.indexOf(`${el.time}`)]
                     }
                 )
@@ -102,7 +98,6 @@ export default class BookingController {
 
     static async createBooking(ctx: Koa.Context) {
         const bookingRepo: Repository<Booking> = getRepository(Booking)
-        const tables: Repository<Tables> = getRepository(Tables)
         let booked: Booking = await bookingRepo.findOne({
             where: {
                 date: ctx.request.body.date,
@@ -111,7 +106,6 @@ export default class BookingController {
         })
         console.log(booked)
         let booking
-        let updateBooked: Booking
         if (!booked) {
             booking = bookingRepo.create(ctx.request.body)
             await bookingRepo.save(booking)

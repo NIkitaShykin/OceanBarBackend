@@ -3,6 +3,7 @@ import {Column, Entity, PrimaryGeneratedColumn} from "typeorm"
 
 @Entity()
 export default class Tables {
+    
     @PrimaryGeneratedColumn()
     id: number
 

@@ -13,6 +13,7 @@ app.use(bodyparser())
 app.use(userRouter.routes()).use(userRouter.allowedMethods())
 app.use(menuRouter.routes()).use(menuRouter.allowedMethods())
 app.use(cartRouter.routes()).use(cartRouter.allowedMethods())
+
 app.use(bookingRouter.routes()).use(cartRouter.allowedMethods())
 
 app.use(async (ctx: Koa.Context, next: () => Promise<any>)=>{
