@@ -6,6 +6,8 @@ import Order from '../models/order.entity'
 import User from '../models/user.entity'
 import Tables from "../models/tables.entity";
 import Booking from "../models/booking.entity";
+import TimeToBookEntity from "../models/timetobook.entity";
+import BookedUsersEntity from "../models/bookedusers.entity";
 
 require('dotenv').config()
 
@@ -21,7 +23,7 @@ const connectionOpts: ConnectionOptions = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME || 'oceanbardb',
     entities: [
-        Dish, User, CartPosition, Order, Tables, Booking
+        Dish, User, CartPosition, Order, Tables, Booking, TimeToBookEntity,BookedUsersEntity
     ],
     synchronize: true,
 }
