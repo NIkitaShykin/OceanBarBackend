@@ -9,6 +9,6 @@
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true
     },
-    "include": ["src/**/*", "services/mail.controller.ts"],
+    "include": ["src/**/*"],
     "exclude": ["node_modules",]
 }

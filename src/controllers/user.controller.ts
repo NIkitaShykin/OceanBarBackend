@@ -4,10 +4,9 @@ import {getRepository, Repository} from 'typeorm'
 import User from '../models/user.entity'
 import * as HttpStatus from 'http-status-codes'
 import * as JWT from 'jsonwebtoken'
-import * as uuid from 'uuid'
-import mailer from "../services/mail.service";
+import { v4 as uuidv4 } from 'uuid'
+import mailer from "../services/mail.service"
 import generateTokens from '../services/tokens.service'
-import { verify } from 'crypto'
 require('dotenv').config()
 
 export type MessageType ={
@@ -22,7 +21,7 @@ export default class UserController {
         const userRepo: Repository<User> = getRepository(User)
         const users: User[] = await userRepo.find()
         ctx.body = {
-            data: {users}
+            data: users
         }
     }
 
@@ -31,7 +30,7 @@ export default class UserController {
         const user: User = await userRepo.findOne(ctx.params.user_id)
         if (!user) ctx.throw(HttpStatus.NOT_FOUND)
         ctx.body = {
-            data: {user}
+            data: user
         }
     }
 
@@ -40,7 +39,7 @@ export default class UserController {
         const checkUser: User = await userRepo.findOne({email: ctx.request.body.email})
         if (checkUser) ctx.throw(HttpStatus.BAD_REQUEST, 'User already exists')
         ctx.request.body.password = hashSync(ctx.request.body.password, 10)
-        ctx.request.body.activationLink = uuid.v4()
+        ctx.request.body.activationLink = uuidv4()
         const newUser: User[] = userRepo.create(ctx.request.body)
         await userRepo.save(newUser)
         const message: MessageType= {
@@ -60,7 +59,7 @@ export default class UserController {
 
     static async login(ctx: Koa.Context) {
         const userRepo: Repository<User> = getRepository(User)
-        let checkUser: User = await userRepo.findOne({
+        const checkUser: User = await userRepo.findOne({
             email: ctx.request.body.email
         })
         if (!checkUser) ctx.throw(HttpStatus.BAD_REQUEST, 'Username or password is incorrect')
@@ -133,7 +132,7 @@ export default class UserController {
         ctx.cookies.set('refreshToken', null)
         await userRepo.save(user)
         ctx.body = {
-            user
+            data: user
         }
     }
 
