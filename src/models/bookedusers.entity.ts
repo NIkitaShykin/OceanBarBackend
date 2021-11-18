@@ -19,7 +19,4 @@ export default class BookedUsersEntity {
 
     @Column({nullable: false})
     amountofpeople?: number
-
-
-
 }

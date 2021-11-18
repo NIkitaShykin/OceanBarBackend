@@ -10,7 +10,7 @@ import BookedUsersEntity from "../models/bookedusers.entity";
 export default class BookingController {
     static async getBooking(ctx: Koa.Context) {
         const timeArray: Repository<TimetobookEntity> = getRepository(TimetobookEntity)
-        let time =await timeArray.find()
+        let time = await timeArray.find()
         const bookingRepo: Repository<Booking> = getRepository(Booking)
         let booked: Booking[] = await bookingRepo.find({
             where: {
@@ -19,10 +19,10 @@ export default class BookingController {
         })
         const tables: Repository<Tables> = getRepository(Tables)
         let amounts = await tables.find()
-        let newArr:string[]
+        let newArr: string[]
         let notAllowedArr: Booking[] = []
-        newArr = [...time.map((el)=>{
-            return  el.avalibletime
+        newArr = [...time.map((el) => {
+            return el.avalibletime
         })]
         switch (ctx.request.query.index) {
             case '0':
@@ -101,23 +101,23 @@ export default class BookingController {
         let userBooking
         if (!booked) {
             booking = bookingRepo.create(ctx.request.body)
-            userBooking=usersbookedRepo.create({
-                name:ctx.request.body.name,
-                phone:ctx.request.body.phone,
-                date:ctx.request.body.date,
-                time:ctx.request.body.time,
-                amountofpeople:ctx.request.body.amountofpeople
+            userBooking = usersbookedRepo.create({
+                name: ctx.request.body.name,
+                phone: ctx.request.body.phone,
+                date: ctx.request.body.date,
+                time: ctx.request.body.time,
+                amountofpeople: ctx.request.body.amountofpeople
             })
             await bookingRepo.save(booking)
             await usersbookedRepo.save(userBooking)
         } else {
             let updateBooked: Booking
-            userBooking=usersbookedRepo.create({
-                name:ctx.request.body.name,
-                phone:ctx.request.body.phone,
-                date:ctx.request.body.date,
-                time:ctx.request.body.time,
-                amountofpeople:ctx.request.body.amountofpeople
+            userBooking = usersbookedRepo.create({
+                name: ctx.request.body.name,
+                phone: ctx.request.body.phone,
+                date: ctx.request.body.date,
+                time: ctx.request.body.time,
+                amountofpeople: ctx.request.body.amountofpeople
             })
             await usersbookedRepo.save(userBooking)
             switch (ctx.request.body.amountofpeople) {
@@ -132,7 +132,7 @@ export default class BookingController {
                     updateBooked = {
                         date: ctx.request.body.date,
                         time: ctx.request.body.time,
-                        forFourPersons: 1+ booked.forFourPersons,
+                        forFourPersons: 1 + booked.forFourPersons,
                     }
                     break;
                 case 6:

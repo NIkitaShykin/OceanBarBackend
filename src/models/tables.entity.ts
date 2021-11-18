@@ -12,9 +12,5 @@ export default class Tables {
 
     @Column({type: "int", default: 0})
     maxamount: number
-
-    // @Column()
-    // avalibletime: string
-
 }
 

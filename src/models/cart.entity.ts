@@ -1,6 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
+import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm"
 import Dish from "./menu.entity"
-import Order from "./order.entity"
 import User from "./user.entity"
 
 @Entity()
@@ -14,7 +13,7 @@ export default class CartPosition {
     @Column()
     quantity: number
 
-    @ManyToOne(()=> Dish, dish => dish.cartPositions)
+    @ManyToOne(()=> Dish, dish => dish.cartPositions, {onDelete: 'SET NULL'})
     dish?: Dish
 
     @ManyToOne(()=> User, user => user.cart)

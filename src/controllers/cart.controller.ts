@@ -28,7 +28,8 @@ export default class CartController {
         let cartPosition: CartPosition = await cartRepo.findOne(
             {
                 where: {
-                    dish: ctx.request.body.id
+                    dish: ctx.request.body.id,
+                    user: ctx.params.user_id
                 }
             }
         )
