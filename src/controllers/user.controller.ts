@@ -132,6 +132,7 @@ export default class UserController {
         user.refreshToken = null
         ctx.cookies.set('refreshToken', null)
         await userRepo.save(user)
+        ctx.redirect(`${process.env.CLIENT_URL}login`)
         ctx.body = {
             user
         }

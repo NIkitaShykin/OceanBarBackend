@@ -46,9 +46,9 @@ export default class User {
     @Column({nullable: true})
     flat?: string
     
-    @OneToMany(() => CartPosition, cart => cart.user)
+    @OneToMany(() => CartPosition, cart => cart.user, {cascade: true, onDelete: 'CASCADE'})
     cart?: CartPosition[]
 
-    @OneToMany(() => Order, order => order.user)
+    @OneToMany(() => Order, order => order.user, {cascade: true, onDelete: 'CASCADE'})
     orders?: Order[]
 }

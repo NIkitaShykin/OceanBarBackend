@@ -14,7 +14,7 @@ export default class CartPosition {
     @Column()
     quantity: number
 
-    @ManyToOne(()=> Dish, dish => dish.cartPositions)
+    @ManyToOne(()=> Dish, dish => dish.cartPositions, {onDelete: 'SET NULL'})
     dish?: Dish
 
     @ManyToOne(()=> User, user => user.cart)

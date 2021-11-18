@@ -5,7 +5,9 @@ import * as cors from '@koa/cors'
 import menuRouter from '../routes/menu.routes'
 import userRouter from '../routes/user.routes'
 import cartRouter from '../routes/cart.routes'
+import orderRouter from '../routes/order.routes'
 require('dotenv').config()
+
 
 const app: Koa = new Koa()
 app.use(cors({origin: process.env.CLIENT_URL}))
@@ -13,6 +15,7 @@ app.use(bodyparser())
 app.use(userRouter.routes()).use(userRouter.allowedMethods())
 app.use(menuRouter.routes()).use(menuRouter.allowedMethods())
 app.use(cartRouter.routes()).use(cartRouter.allowedMethods())
+app.use(orderRouter.routes()).use(orderRouter.allowedMethods())
 
 app.use(async (ctx: Koa.Context, next: () => Promise<any>)=>{
     try {
