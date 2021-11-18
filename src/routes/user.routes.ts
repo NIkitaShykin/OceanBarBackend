@@ -8,7 +8,9 @@ const routerOpts: Router.IRouterOptions = {
 }
 const userRouter: Router = new Router(routerOpts)
 // /api/users/ get all users
-userRouter.get('/', authMiddleware ,UserController.getUsers)
+userRouter.get('/', /* authMiddleware , */UserController.getUsers)
+// /api/users/refresh refreshes access token
+userRouter.get('/refreshUser', UserController.refresh)
 // /api/users/:user_id get one user
 userRouter.get('/:user_id', authMiddleware, UserController.getUser)
 // /api/users/register/token
@@ -20,9 +22,8 @@ userRouter.post('/auth', UserController.login)
 // /api/logout logout user (deletes refreshToken from db and cookie)
 userRouter.post('/logout', authMiddleware, UserController.logout)
 // /api/users/:user_id delete user from db
-userRouter.delete('/:user_id', authMiddleware, UserController.deleteUser)
+userRouter.delete('/:user_id', /* authMiddleware, */ UserController.deleteUser)
 // /api/users/:user_id update user in db
 userRouter.patch('/:user_id', authMiddleware, UserController.updateUser)
-// /api/users/refresh refreshes access token
 
 export default userRouter

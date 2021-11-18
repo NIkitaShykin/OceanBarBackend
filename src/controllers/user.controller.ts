@@ -7,6 +7,7 @@ import * as JWT from 'jsonwebtoken'
 import * as uuid from 'uuid'
 import mailer from "../services/mail.service";
 import generateTokens from '../services/tokens.service'
+import { verify } from 'crypto'
 require('dotenv').config()
 
 export type MessageType ={
@@ -41,7 +42,6 @@ export default class UserController {
         ctx.request.body.password = hashSync(ctx.request.body.password, 10)
         ctx.request.body.activationLink = uuid.v4()
         const newUser: User[] = userRepo.create(ctx.request.body)
-        
         await userRepo.save(newUser)
         const message: MessageType= {
             to: ctx.request.body.email,
@@ -74,7 +74,8 @@ export default class UserController {
         await userRepo.save(checkUser)
         
         ctx.body = {
-            token: tokens.accessToken,
+            accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken,
             data: checkUser
         }
     
@@ -137,8 +138,20 @@ export default class UserController {
     }
 
     static async refresh(ctx: Koa.Context){
-        const UserRepo: Repository<User> = getRepository(User)
+        const userRepo: Repository<User> = getRepository(User)
         const refreshToken: string = ctx.cookies.get('refreshToken')
         if (!refreshToken) ctx.throw(HttpStatus.UNAUTHORIZED, 'User not authorized')
+        const userData: string | JWT.JwtPayload = JWT.verify(refreshToken, process.env.JWT_REFRESH_SECRET)
+        const user: User = await userRepo.findOne({where:{ refreshToken: refreshToken}})
+        if (!userData || !user) ctx.throw(HttpStatus.UNAUTHORIZED, 'User not authorized')
+        const tokens: {accessToken: string, refreshToken: string} = generateTokens({id: user.id})
+        ctx.cookies.set('refreshToken',  tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+        user.refreshToken = tokens.refreshToken
+
+        await userRepo.save(user)
+        ctx.body = {
+            accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken
+        }
     }
 }
