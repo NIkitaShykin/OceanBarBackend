@@ -5,8 +5,8 @@ import * as cors from '@koa/cors'
 import menuRouter from '../routes/menu.routes'
 import userRouter from '../routes/user.routes'
 import cartRouter from '../routes/cart.routes'
-import bookingRouter from "../routes/booking.routes";
-import orderRouter from "../routes/order.routes";
+import bookingRouter from '../routes/booking.routes'
+import orderRouter from '../routes/order.routes'
 
 const app: Koa = new Koa()
 app.use(cors())
