@@ -1,7 +1,7 @@
-import {getRepository, Repository} from "typeorm";
-import Tables from "../models/tables.entity";
-import Booking from "../models/booking.entity";
-import TimetobookEntity from "../models/timetobook.entity";
+import {getRepository, Repository} from 'typeorm';
+import Tables from '../models/tables.entity';
+import Booking from '../models/booking.entity';
+import TimetobookEntity from '../models/timetobook.entity';
 
 export async function getAvailableTime(index: number, booked: Booking[], amountOfPeople: string) {
     const tables: Repository<Tables> = getRepository(Tables)
@@ -9,15 +9,15 @@ export async function getAvailableTime(index: number, booked: Booking[], amountO
     const time = await timeArray.find()
     const amounts = await tables.find()
     const notAllowedArr: Booking[] = []
-    let newArr: string[] = [...time.map((el) => {
+    let newArr: string[] = [...time.map((el: TimetobookEntity) => {
         return el.avalibletime
     })]
-    booked.forEach((el: any) => {
-        if (el[amountOfPeople] > amounts[index].maxamount) {
+    booked.forEach((el: Booking) => {
+        if (el[amountOfPeople as keyof Booking] > amounts[index].maxamount) {
             notAllowedArr.push(el)
         }
     })
-    notAllowedArr.forEach((el) => {
+    notAllowedArr.forEach((el:Booking) => {
             delete newArr[newArr.indexOf(`${el.time}`)]
         }
     )
@@ -25,10 +25,10 @@ export async function getAvailableTime(index: number, booked: Booking[], amountO
 }
 
 export async function createReservation(date: string, time: string, booked: Booking, amountOfPeople: number) {
-    let updateBooked:Booking
+    let updateBooked: Booking
     switch (amountOfPeople) {
         case 2:
-             updateBooked = {
+            updateBooked = {
                 date,
                 time,
                 forTwoPersons: 1 + booked.forTwoPersons,
