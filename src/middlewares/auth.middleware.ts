@@ -10,9 +10,7 @@ export default async function (ctx: Koa.Context, next: Koa.Next) {
         if (!ctx.req.headers.authorization) ctx.throw(HttpStatus.UNAUTHORIZED, 'You are not authorized')
         const token: string  = ctx.req.headers.authorization.split(' ')[1]
         if (!token) ctx.throw(HttpStatus.UNAUTHORIZED, 'You are not authorized')
-        const user: any = JWT.verify(token, process.env.JWT_SECRET, function (err: any, decoded: any): any {
-            return decoded
-        })
+        const user: any = JWT.verify(token, process.env.JWT_SECRET)
         if (!user) ctx.throw(HttpStatus.UNAUTHORIZED, 'Your token expired')
         const userRepo: Repository<User> = getRepository(User)
         const checkUser = await userRepo.findOne(user.id)
