@@ -10,11 +10,11 @@ export default class Order {
     @PrimaryGeneratedColumn()
     id?: number
 
-    @Column({nullable: true})
+    @Column({nullable: true, default: 0})
     price?: number
 
     @Column({nullable: true})
-    state?: orderState
+    state?: string
 
     @ManyToOne(() => User, user => user.orders)
     user?: User

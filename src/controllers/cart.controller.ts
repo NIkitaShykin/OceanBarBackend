@@ -8,7 +8,6 @@ import Dish from '../models/menu.entity'
 export default class CartController {
     static async getCart(ctx: Koa.Context){
         const cartRepo: Repository<CartPosition> = getRepository(CartPosition)
-
         let cart: CartPosition[] = await cartRepo.find({
             where: {
                 user: ctx.params.user_id,
@@ -35,7 +34,7 @@ export default class CartController {
             }
         )
         if (cartPosition) ctx.throw(HttpStatus.BAD_REQUEST, 'dish already in cart ')
-    
+
         cartPosition = cartRepo.create({
             dish: dish,
             ingredients: ctx.request.body.ingredients || dish.ingredients,
