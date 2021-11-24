@@ -34,7 +34,7 @@ export default class CartController {
             }
         )
         if (cartPosition) ctx.throw(HttpStatus.BAD_REQUEST, 'dish already in cart ')
-    
+
         cartPosition = cartRepo.create({
             dish: dish,
             ingredients: ctx.request.body.ingredients || dish.ingredients,
