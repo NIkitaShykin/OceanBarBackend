@@ -38,7 +38,14 @@ export default class BookingController {
             data: resp
         }
     }
+    static async getUsersBooking(ctx: Koa.Context) {
+        const bookingUserRepo: Repository<BookedUsersEntity> = getRepository(BookedUsersEntity)
+        const bookedUsers = await bookingUserRepo.find()
+        ctx.body={
+            bookedUsers
+        }
 
+    }
     static async createBooking(ctx: Koa.Context) {
         const bookingRepo: Repository<Booking> = getRepository(Booking)
         const usersBookedRepo: Repository<BookedUsersEntity> = getRepository(BookedUsersEntity)
