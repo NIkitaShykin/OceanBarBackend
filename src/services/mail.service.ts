@@ -1,4 +1,4 @@
-import { MessageType } from './user.controller';
+import { MessageType } from '../controllers/user.controller';
 import * as nodemailer from 'nodemailer'
 import SMTPTransport = require("nodemailer/lib/smtp-transport")
 
