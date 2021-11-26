@@ -1,7 +1,5 @@
 import * as fs from 'fs'
 import * as aws_sdk from 'aws-sdk'
-import { resolve } from 'path/posix'
-import { rejects } from 'assert'
 require('dotenv').config()
 
 export default async function uploadToS3(filePath:string, fileName: string, category: string ): Promise<string> {
@@ -23,9 +21,11 @@ export default async function uploadToS3(filePath:string, fileName: string, cate
         uploadParams.Body = fileStream
         S3.upload(uploadParams, function (err, data){
             if (err) {
+                fs.unlinkSync(filePath)
                 reject('Error when upload' + err)
             }
             if (data) {
+                fs.unlinkSync(filePath)
                 resolve(data.Location)
             }
         }) 

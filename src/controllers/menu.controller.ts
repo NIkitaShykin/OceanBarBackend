@@ -75,12 +75,13 @@ export default class MenuController {
     }
 
     static async uploadImage(ctx: Koa.Context): Promise<void> {
+        if (!ctx.request.files.file) ctx.throw(HttpStatus.BAD_REQUEST, 'Please add file, to body')
         const file: formidable.File = ctx.request.files.file as formidable.File
 
         const imageURL: string = await uploadToS3(file.path, ctx.request.body.name, ctx.request.body.category)
+        if (!imageURL) ctx.throw(HttpStatus.BAD_REQUEST, 'Error while uploading file, try later please')
         ctx.body = {
-            url: imageURL,
-            path: file.path
+            url: imageURL
         }
     }
 
