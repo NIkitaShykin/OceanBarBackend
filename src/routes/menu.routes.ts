@@ -16,5 +16,7 @@ menuRouter.post('/', authMiddleware, MenuController.addDish)
 menuRouter.delete('/:dish_id', authMiddleware, MenuController.deleteDish)
 // /api/menu/:dish_id update dish in DB
 menuRouter.patch('/:dish_id', authMiddleware, MenuController.updateDish);
+// /api/menu/image upload image to S3
+menuRouter.post('/image', MenuController.uploadImage)
 
 export default menuRouter;
