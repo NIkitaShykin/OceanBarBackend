@@ -66,38 +66,38 @@ export default class OrderController {
         }
     }
 
-    static async deleteOrderAdmin(ctx: Koa.Context) {
-        const orderRepo: Repository<Order> = getRepository(Order)
-        const order: Order= await orderRepo.findOne({
-            where: {
-                id: ctx.request.query.id
-            }
-        })
-        if (!order) {
-            ctx.throw(HttpStatus.NOT_FOUND)
-        }
-        await orderRepo.delete(order)
-
-        ctx.status = HttpStatus.NO_CONTENT
-
-    }
-
-    static async updateOrder(ctx: Koa.Context) {
-        const orderRepo: Repository<Order> = getRepository(Order)
-        const order: Order= await orderRepo.findOne({
-            where: {
-                id: ctx.request.query.id
-            }
-        })
-        if (!order) {
-            ctx.throw(HttpStatus.NOT_FOUND)
-        }
-        const updatedOrder = await orderRepo.merge(order, ctx.request.body)
-        await orderRepo.save(updatedOrder)
-        ctx.body = {
-            updatedOrder
-        }
-    }
+    // static async deleteOrderAdmin(ctx: Koa.Context) {
+    //     const orderRepo: Repository<Order> = getRepository(Order)
+    //     const order: Order= await orderRepo.findOne({
+    //         where: {
+    //             id: ctx.request.query.id
+    //         }
+    //     })
+    //     if (!order) {
+    //         ctx.throw(HttpStatus.NOT_FOUND)
+    //     }
+    //     await orderRepo.delete(order)
+    //
+    //     ctx.status = HttpStatus.NO_CONTENT
+    //
+    // }
+    //
+    // static async updateOrder(ctx: Koa.Context) {
+    //     const orderRepo: Repository<Order> = getRepository(Order)
+    //     const order: Order= await orderRepo.findOne({
+    //         where: {
+    //             id: ctx.request.query.id
+    //         }
+    //     })
+    //     if (!order) {
+    //         ctx.throw(HttpStatus.NOT_FOUND)
+    //     }
+    //     const updatedOrder = await orderRepo.merge(order, ctx.request.body)
+    //     await orderRepo.save(updatedOrder)
+    //     ctx.body = {
+    //         updatedOrder
+    //     }
+    // }
 
     static async getTimeForTakeaway(ctx: Koa.Context) {
         const timeArray: Repository<TimetobookEntity> = getRepository(TimetobookEntity)
