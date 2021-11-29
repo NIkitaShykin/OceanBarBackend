@@ -9,7 +9,7 @@ const bookingRouter: Router = new Router(routerOpts)
 // /api/cart/ get cart for user
 bookingRouter.get('/', /*authMiddleware*/ BookingController.getBooking)
 bookingRouter.get('/usersbooking', /*authMiddleware*/ BookingController.getUsersBooking)
-// /api/cart/ add dish to the cart (also creates new order if needed)
+bookingRouter.patch('/usersbooking', /*authMiddleware*/ BookingController.updateBooking)
 bookingRouter.post('/', /*authMiddleware*/ BookingController.createBooking)
 
 export default bookingRouter
