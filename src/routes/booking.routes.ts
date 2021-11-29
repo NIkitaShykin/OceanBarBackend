@@ -11,5 +11,6 @@ bookingRouter.get('/', /*authMiddleware*/ BookingController.getBooking)
 bookingRouter.get('/usersbooking', /*authMiddleware*/ BookingController.getUsersBooking)
 bookingRouter.patch('/usersbooking', /*authMiddleware*/ BookingController.updateBooking)
 bookingRouter.post('/', /*authMiddleware*/ BookingController.createBooking)
+bookingRouter.delete('/usersbooking', /*authMiddleware*/ BookingController.deleteUsersBooking)
 
 export default bookingRouter

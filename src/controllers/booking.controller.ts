@@ -4,6 +4,7 @@ import {getRepository, Repository} from 'typeorm'
 import Booking from '../models/booking.entity';
 import BookedUsersEntity from '../models/bookedusers.entity';
 import {createNewReservation, createReservation, getAvailableTime} from '../services/booking.service';
+import Dish from "../models/menu.entity";
 
 
 export default class BookingController {
@@ -43,7 +44,6 @@ export default class BookingController {
     static async getUsersBooking(ctx: Koa.Context) {
         const bookingUserRepo: Repository<BookedUsersEntity> = getRepository(BookedUsersEntity)
         if (ctx.request.query.id) {
-            console.log('123213')
             const booked: Booking[] = await bookingUserRepo.find({
                 where: {
                     id: ctx.request.query.id
@@ -57,6 +57,18 @@ export default class BookingController {
         ctx.body = {
             bookedUsers
         }
+    }
+    static async deleteUsersBooking(ctx: Koa.Context) {
+        const bookingUserRepo: Repository<BookedUsersEntity> = getRepository(BookedUsersEntity)
+        const bookedUsers = await bookingUserRepo.findOne({
+            where:{
+                id:ctx.request.query.id
+            }
+        })
+        if (!bookedUsers)  ctx.throw(HttpStatus.NOT_FOUND)
+        await bookingUserRepo.delete(bookedUsers)
+        ctx.status = HttpStatus.NO_CONTENT
+
     }
 
     static async updateBooking(ctx: Koa.Context) {
