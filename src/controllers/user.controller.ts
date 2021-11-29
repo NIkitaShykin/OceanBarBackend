@@ -65,19 +65,19 @@ export default class UserController {
         if (!checkUser) ctx.throw(HttpStatus.BAD_REQUEST, 'Username or password is incorrect')
         const isMatch: boolean = await compare(ctx.request.body.password, checkUser.password)
         if (!isMatch) ctx.throw(HttpStatus.BAD_REQUEST, 'Username or password is incorrect')
-        
+
         const tokens: {accessToken: string, refreshToken: string} = generateTokens({id: checkUser.id})
         ctx.cookies.set('refreshToken',  tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
         checkUser.refreshToken = tokens.refreshToken
 
         await userRepo.save(checkUser)
-        
+
         ctx.body = {
             accessToken: tokens.accessToken,
             refreshToken: tokens.refreshToken,
             data: checkUser
         }
-    
+
     }
 
     static async deleteUser(ctx: Koa.Context) {
@@ -85,7 +85,7 @@ export default class UserController {
         const user: User = await menuRepo.findOne(ctx.params.user_id)
         if (!user) ctx.throw(HttpStatus.NOT_FOUND)
         await menuRepo.delete(user)
-    
+
         ctx.body = {
             message: `User with id ${ctx.params.user_id} deleted`
         }
@@ -99,7 +99,7 @@ export default class UserController {
         const updatedUser: User = userRepo.merge(user, ctx.request.body)
         if (ctx.request.body.password) updatedUser.password = hashSync(ctx.request.body.password, 10)
         await userRepo.save(updatedUser)
-    
+
         ctx.body = {
             data: {user: updatedUser}
         }

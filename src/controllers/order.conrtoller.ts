@@ -57,6 +57,14 @@ export default class OrderController {
         }
     }
 
+    static async getAllOrders(ctx: Koa.Context) {
+        const orderRepo: Repository<Order> = getRepository(Order)
+        const orders: Order[] = await orderRepo.find()
+        ctx.body = {
+            orders
+        }
+    }
+
     static async getTimeForTakeaway(ctx: Koa.Context) {
         const timeArray: Repository<TimetobookEntity> = getRepository(TimetobookEntity)
         let time = await timeArray.find()
