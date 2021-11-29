@@ -13,6 +13,8 @@ orderRouter.post('/', authMiddleware, OrderController.addOrder)
 // /api/order/ get order for user
 orderRouter.get('/', authMiddleware, OrderController.getOrders)
 orderRouter.get('/orders', OrderController.getAllOrders)
+orderRouter.delete('/orders', OrderController.deleteOrderAdmin)
+orderRouter.patch('/orders', OrderController.updateOrder)
 orderRouter.get('/takeaway', authMiddleware, OrderController.getTimeForTakeaway)
 
 // /api/order/ get order by ID for user
