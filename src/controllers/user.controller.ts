@@ -151,7 +151,8 @@ export default class UserController {
         await userRepo.save(user)
         ctx.body = {
             accessToken: tokens.accessToken,
-            refreshToken: tokens.refreshToken
+            refreshToken: tokens.refreshToken,
+            data: user
         }
     }
 }
