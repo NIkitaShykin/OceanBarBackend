@@ -11,7 +11,7 @@ require('dotenv').config()
 
 
 const app: Koa = new Koa()
-app.use(cors({origin: process.env.CLIENT_URL}))
+app.use(cors({origin: process.env.CLIENT_URL, credentials: true}))
 app.use(bodyparser({
     multipart: true,
 }))

@@ -34,7 +34,7 @@ export default class OrderController {
             paymentType: paymentType,
             tableSize: tableSize,
             address: address,
-            state: 'in progress'
+            state: 'В процессе'
         })
 
         await orderRepo.save(order)
@@ -118,7 +118,7 @@ export default class OrderController {
 
         if (!order) ctx.throw(HttpStatus.NOT_FOUND, 'No order found')
         const updatedOrder: Order = await orderRepo.merge(order, ctx.request.body)
-        order.state === 'in progress' ? updatedOrder.state = 'done' : updatedOrder.state = 'in progress'
+        order.state === 'В процессе' ? updatedOrder.state = 'Выполнен' : updatedOrder.state = 'В процессе'
         orderRepo.save(updatedOrder)
 
         ctx.body = {
