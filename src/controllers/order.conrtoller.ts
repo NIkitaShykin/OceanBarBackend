@@ -6,6 +6,7 @@ import Order from '../models/order.entity'
 import Dish from '../models/menu.entity'
 import CartPosition from '../models/cart.entity'
 import TimetobookEntity from '../models/timetobook.entity';
+import BookedUsersEntity from "../models/bookedusers.entity";
 
 export default class OrderController {
     static async addOrder(ctx: Koa.Context) {
@@ -57,6 +58,47 @@ export default class OrderController {
             orders
         }
     }
+
+    static async getAllOrders(ctx: Koa.Context) {
+        const orderRepo: Repository<Order> = getRepository(Order)
+        const orders: Order[] = await orderRepo.find()
+        ctx.body = {
+            orders
+        }
+    }
+
+    // static async deleteOrderAdmin(ctx: Koa.Context) {
+    //     const orderRepo: Repository<Order> = getRepository(Order)
+    //     const order: Order= await orderRepo.findOne({
+    //         where: {
+    //             id: ctx.request.query.id
+    //         }
+    //     })
+    //     if (!order) {
+    //         ctx.throw(HttpStatus.NOT_FOUND)
+    //     }
+    //     await orderRepo.delete(order)
+    //
+    //     ctx.status = HttpStatus.NO_CONTENT
+    //
+    // }
+    //
+    // static async updateOrder(ctx: Koa.Context) {
+    //     const orderRepo: Repository<Order> = getRepository(Order)
+    //     const order: Order= await orderRepo.findOne({
+    //         where: {
+    //             id: ctx.request.query.id
+    //         }
+    //     })
+    //     if (!order) {
+    //         ctx.throw(HttpStatus.NOT_FOUND)
+    //     }
+    //     const updatedOrder = await orderRepo.merge(order, ctx.request.body)
+    //     await orderRepo.save(updatedOrder)
+    //     ctx.body = {
+    //         updatedOrder
+    //     }
+    // }
 
     static async getTimeForTakeaway(ctx: Koa.Context) {
         const timeArray: Repository<TimetobookEntity> = getRepository(TimetobookEntity)

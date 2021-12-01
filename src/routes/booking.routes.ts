@@ -8,7 +8,9 @@ const routerOpts: Router.IRouterOptions = {
 const bookingRouter: Router = new Router(routerOpts)
 // /api/cart/ get cart for user
 bookingRouter.get('/', /*authMiddleware*/ BookingController.getBooking)
-// /api/cart/ add dish to the cart (also creates new order if needed)
+bookingRouter.get('/usersbooking', /*authMiddleware*/ BookingController.getUsersBooking)
+bookingRouter.patch('/usersbooking', /*authMiddleware*/ BookingController.updateBooking)
 bookingRouter.post('/', /*authMiddleware*/ BookingController.createBooking)
+bookingRouter.delete('/usersbooking', /*authMiddleware*/ BookingController.deleteUsersBooking)
 
 export default bookingRouter

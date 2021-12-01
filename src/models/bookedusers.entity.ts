@@ -18,5 +18,5 @@ export default class BookedUsersEntity {
     time?: string
 
     @Column({nullable: false})
-    amountofpeople?: number
+    amountofpeople?:  number
 }
