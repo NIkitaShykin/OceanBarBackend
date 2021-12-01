@@ -17,6 +17,7 @@ export default async function (ctx: Koa.Context, next: Koa.Next) {
         if(!checkUser) ctx.throw(HttpStatus.NOT_FOUND, 'User not found')
         if(!checkUser.isActivated) ctx.throw(HttpStatus.BAD_REQUEST, 'User is not activated')
         ctx.params.user_id = user.id
+        ctx.params.isAdmin = user.isAdmin
         await next()
     } catch(error) {
         ctx.body = {
