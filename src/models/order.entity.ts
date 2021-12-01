@@ -14,7 +14,7 @@ export default class Order {
     price?: number
 
     @Column({nullable: true})
-    state?: string
+    state?: orderState
 
     @ManyToOne(() => User, user => user.orders)
     user?: User

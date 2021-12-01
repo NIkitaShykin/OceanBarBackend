@@ -1,6 +1,6 @@
 import * as Koa from 'koa'
 import * as HttpStatus from 'http-status-codes'
-import * as bodyparser from 'koa-bodyparser'
+import * as bodyparser from 'koa-body'
 import * as cors from '@koa/cors'
 import menuRouter from '../routes/menu.routes'
 import userRouter from '../routes/user.routes'
@@ -11,8 +11,10 @@ require('dotenv').config()
 
 
 const app: Koa = new Koa()
-app.use(cors({origin: process.env.CLIENT_URL}))
-app.use(bodyparser())
+app.use(cors({origin: process.env.CLIENT_URL, credentials: true}))
+app.use(bodyparser({
+    multipart: true,
+}))
 app.use(userRouter.routes()).use(userRouter.allowedMethods())
 app.use(menuRouter.routes()).use(menuRouter.allowedMethods())
 app.use(cartRouter.routes()).use(cartRouter.allowedMethods())

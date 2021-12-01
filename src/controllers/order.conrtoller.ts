@@ -24,17 +24,18 @@ export default class OrderController {
             return current.dish
         })
 
+        const {type, date, time, price, paymentType, tableSize, address} = ctx.request.body
         const order: Order = orderRepo.create({
+            user: ctx.params.user_id,
             dishes: dishes,
-            state: ctx.request.body.state,
-            type: ctx.request.body.type,
-            date: ctx.request.body.date,
-            time: ctx.request.body.time,
-            price: ctx.request.body.price,
-            paymentType: ctx.request.body.paymentType,
-            tableSize: ctx.request.body.tableSize,
-            address: ctx.request.body.address,
-            user: ctx.params.user_id
+            type: type,
+            date: date,
+            time: time,
+            price: price,
+            paymentType: paymentType,
+            tableSize: tableSize,
+            address: address,
+            state: 'В процессе'
         })
 
         await orderRepo.save(order)
@@ -144,7 +145,26 @@ export default class OrderController {
         }
 
         await orderRepo.delete(ctx.params.order_id)
-
         ctx.status = HttpStatus.NO_CONTENT
+    }
+
+    static async updateOrder(ctx: Koa.Context) {
+        const orderRepo: Repository<Order> = getRepository(Order)
+
+        const order: Order = await orderRepo.findOne({
+            where: {
+                id: ctx.params.order_id,
+            },
+            relations: ['user'],
+        })
+
+        if (!order) ctx.throw(HttpStatus.NOT_FOUND, 'No order found')
+        const updatedOrder: Order = await orderRepo.merge(order, ctx.request.body)
+        order.state === 'В процессе' ? updatedOrder.state = 'Выполнен' : updatedOrder.state = 'В процессе'
+        orderRepo.save(updatedOrder)
+
+        ctx.body = {
+            updatedOrder
+        }
     }
 }

@@ -13,6 +13,9 @@ export default class User {
     @Column({type:"boolean", nullable: true, default: false})
     isActivated?: boolean
 
+    @Column({type:'boolean', nullable: true, default: false})
+    isAdmin: true
+
     @Column({nullable: true})
     activationLink?: string
 
