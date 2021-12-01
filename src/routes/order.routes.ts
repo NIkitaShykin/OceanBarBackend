@@ -14,6 +14,7 @@ orderRouter.post('/', authMiddleware, OrderController.addOrder)
 // /api/order/ get orders for user
 orderRouter.get('/', authMiddleware, OrderController.getOrders)
 orderRouter.get('/orders', OrderController.getAllOrders)
+
 orderRouter.get('/takeaway', authMiddleware, OrderController.getTimeForTakeaway)
 orderRouter.get('/dishes/:order_id', authMiddleware, OrderController.getDishes)
 // /api/order/ get order by ID for user
