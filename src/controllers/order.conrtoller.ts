@@ -22,7 +22,7 @@ export default class OrderController {
             relations: ['dish']
         })
         let dishes: OrderDish[] = dishesOrderRepo.create(cart)
-    
+
         const {type, date, time, price, paymentType, tableSize, address} = ctx.request.body
         const order: Order = orderRepo.create({
             user: ctx.params.user_id,
@@ -42,7 +42,7 @@ export default class OrderController {
             val.order = order
             return val
         })
-        
+
         await dishesOrderRepo.save(newDishes)
         await cartRepo.delete({
             user: {
@@ -77,7 +77,7 @@ export default class OrderController {
                     order: {
                         id: ctx.params.order_id
                     }
-                }, 
+                },
                 relations: [ 'dish', 'order']
             }
         )
@@ -96,7 +96,7 @@ export default class OrderController {
             availableTime
         }
     }
-  
+
     static async getAllOrders(ctx: Koa.Context) {
         const orderRepo: Repository<Order> = getRepository(Order)
         const orders: Order[] = await orderRepo.find()
@@ -116,7 +116,7 @@ export default class OrderController {
             ctx.throw(HttpStatus.NOT_FOUND)
         }
         await orderRepo.delete(order)
-    
+
         ctx.status = HttpStatus.NO_CONTENT
     }
 
@@ -136,7 +136,7 @@ export default class OrderController {
             updatedOrder
         }
     }
-    
+
     static async updateOrder(ctx: Koa.Context) {
         const orderRepo: Repository<Order> = getRepository(Order)
         const order: Order= await orderRepo.findOne({
@@ -154,16 +154,7 @@ export default class OrderController {
         }
     }
 
-    static async getTimeForTakeaway(ctx: Koa.Context) {
-        const timeArray: Repository<TimetobookEntity> = getRepository(TimetobookEntity)
-        let time = await timeArray.find()
-        let availableTime = [...time.map((el) => {
-            return el.avalibletime
-        })]
-        ctx.body = {
-            availableTime
-        }
-    }
+
 
     static async getOrderById(ctx: Koa.Context) {
         const orderRepo: Repository<Order> = getRepository(Order)
