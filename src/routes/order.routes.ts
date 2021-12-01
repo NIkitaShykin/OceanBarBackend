@@ -1,6 +1,7 @@
 import * as Router from 'koa-router'
 import authMiddleware from '../middlewares/auth.middleware'
 import OrderController from '../controllers/order.conrtoller'
+import adminMiddleware from '../middlewares/admin.middleware'
 
 const routerOpts: Router.IRouterOptions = {
   prefix: '/api/order'
@@ -13,7 +14,6 @@ orderRouter.post('/', authMiddleware, OrderController.addOrder)
 // /api/order/ get orders for user
 orderRouter.get('/', authMiddleware, OrderController.getOrders)
 orderRouter.get('/orders', OrderController.getAllOrders)
-orderRouter.delete('/orders', OrderController.deleteOrderAdmin)
 orderRouter.patch('/orders', OrderController.updateOrder)
 orderRouter.get('/takeaway', authMiddleware, OrderController.getTimeForTakeaway)
 
@@ -23,7 +23,13 @@ orderRouter.get('/:order_id', authMiddleware, OrderController.getOrderById)
 // /api/order/ update order state by ID for user
 orderRouter.patch('/:order_id', authMiddleware, OrderController.updateOrder)
 
-// api/order/:order_id delete order from DB
+/* // api/order/:order_id delete order from DB
 orderRouter.delete('/:order_id', authMiddleware, OrderController.deleteOrder)
+ */
+orderRouter.get('/admin/', /* authMiddleware, adminMiddleware, */ OrderController.getAllOrders)
+
+orderRouter.patch('/admin/:order_id', /* authMiddleware, adminMiddleware, */ OrderController.getAllOrders)
+
+orderRouter.delete('/admin/:order_id', /* authMiddleware, adminMiddleware, */ OrderController.deleteOrderAdmin)
 
 export default orderRouter
