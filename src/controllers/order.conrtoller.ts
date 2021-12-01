@@ -36,13 +36,18 @@ export default class OrderController {
             state: 'В процессе'
         })
 
+        await orderRepo.save(order)
         const newDishes: OrderDish[] = dishes.map(val=> {
             val.order = order
             return val
         })
-
-        await orderRepo.save(order)
+        
         await dishesOrderRepo.save(newDishes)
+        await cartRepo.delete({
+            user: {
+                id: ctx.params.user_id
+            }
+        })
 
         ctx.body = {
             order
@@ -56,20 +61,28 @@ export default class OrderController {
             where: {
                 user: ctx.params.user_id,
             },
-            relations: ['user', 'dishes'],
+            relations: ['dishes'],
         })
         ctx.body = {
             orders
         }
-/*         const dishesOrderRepo: Repository<OrderDish> = getRepository(OrderDish)
-        const x = await dishesOrderRepo.find(
+    }
+
+    static async getDishes(ctx: Koa.Context) {
+        const dishesOrderRepo: Repository<OrderDish> = getRepository(OrderDish)
+        const dishes = await dishesOrderRepo.find(
             {
-                relations: ['order', 'dish']
+                /* where: {
+                    order: {
+                        id: ctx.params.order_id
+                    }
+                }, */
+                relations: [ 'dish', 'order']
             }
         )
         ctx.body = {
-            x
-        } */
+            dishes
+        }
     }
 
     static async getTimeForTakeaway(ctx: Koa.Context) {

@@ -20,7 +20,7 @@ export default class Order {
     @ManyToOne(() => User, user => user.orders)
     user?: User
 
-    @OneToMany(()=> OrderDish, dish => dish.order, {eager: true})
+    @OneToMany(()=> OrderDish, dish => dish.order)
     dishes?: OrderDish[]
 
     @Column({nullable: true})

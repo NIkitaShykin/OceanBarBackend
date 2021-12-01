@@ -14,7 +14,7 @@ export default class OrderDish {
     @Column()
     quantity: number
 
-    @ManyToOne(()=> Order, order => order.dishes)
+    @ManyToOne(()=> Order, order => order.dishes, {cascade: true, onDelete: 'CASCADE'})
     order?:Order
 
     @ManyToOne(()=> Dish, dish => dish.order)
