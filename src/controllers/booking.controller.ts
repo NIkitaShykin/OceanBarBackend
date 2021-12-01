@@ -53,7 +53,7 @@ export default class BookingController {
         if (ctx.request.body.amountofpeople > 10) {
             throw ctx.throw(HttpStatus.BAD_REQUEST, 'такого кол-ва гостей не сущетсвует ')
         }
-        const userBooking = usersBookedRepo.create({
+        const userBooking: BookedUsersEntity = usersBookedRepo.create({
             name: ctx.request.body.name,
             phone: ctx.request.body.phone,
             date: ctx.request.body.date,

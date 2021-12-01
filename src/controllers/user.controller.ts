@@ -65,7 +65,7 @@ export default class UserController {
         if (!checkUser) ctx.throw(HttpStatus.BAD_REQUEST, 'Username or password is incorrect')
         const isMatch: boolean = await compare(ctx.request.body.password, checkUser.password)
         if (!isMatch) ctx.throw(HttpStatus.BAD_REQUEST, 'Username or password is incorrect')
-        
+        if (!checkUser.isActivated) ctx.throw(HttpStatus.BAD_REQUEST, 'User is not activated')
         const tokens: {accessToken: string, refreshToken: string} = generateTokens({id: checkUser.id, isAdmin: checkUser.isAdmin})
         ctx.cookies.set('refreshToken',  tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
         checkUser.refreshToken = tokens.refreshToken
@@ -151,7 +151,8 @@ export default class UserController {
         await userRepo.save(user)
         ctx.body = {
             accessToken: tokens.accessToken,
-            refreshToken: tokens.refreshToken
+            refreshToken: tokens.refreshToken,
+            data: user
         }
     }
 }
