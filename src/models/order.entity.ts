@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, Tree } from "typeorm"
 import Dish from "./menu.entity"
+import OrderDish from "./orderDish.entity"
 import User from "./user.entity"
 
 type orderState = 'В процессе' | 'Выполнен'
@@ -14,13 +15,13 @@ export default class Order {
     price?: number
 
     @Column({nullable: true})
-    state?: string
+    state?: orderState
 
     @ManyToOne(() => User, user => user.orders)
     user?: User
 
-    @OneToMany(() => Dish, dish => dish.order)
-    dishes?: Dish[]
+    @OneToMany(()=> OrderDish, dish => dish.order)
+    dishes?: OrderDish[]
 
     @Column({nullable: true})
     type?: orderType

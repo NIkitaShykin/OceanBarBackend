@@ -3,6 +3,8 @@ import {getRepository, Repository} from 'typeorm'
 import Dish from '../models/menu.entity'
 import * as HttpStatus from 'http-status-codes'
 import {Like, FindOperator} from "typeorm";
+import * as formidable from 'formidable'
+import uploadToS3 from '../services/image.service';
 
 type MenuCondition = {
     name?: FindOperator<string>,
@@ -71,4 +73,16 @@ export default class MenuController {
             data: {dish: updatedDish}
         }
     }
+
+    static async uploadImage(ctx: Koa.Context): Promise<void> {
+        if (!ctx.request.files.file) ctx.throw(HttpStatus.BAD_REQUEST, 'Please add file, to body')
+        const file: formidable.File = ctx.request.files.file as formidable.File
+
+        const imageURL: string = await uploadToS3(file.path, ctx.request.body.name, ctx.request.body.category)
+        if (!imageURL) ctx.throw(HttpStatus.BAD_REQUEST, 'Error while uploading file, try later please')
+        ctx.body = {
+            url: imageURL
+        }
+    }
+
 }

@@ -40,11 +40,13 @@
   },
   "dependencies": {
     "@koa/cors": "^3.1.0",
+    "aws-sdk": "^2.1036.0",
     "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
     "http-status-codes": "^2.1.4",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.3",
+    "koa-body": "^4.2.0",
     "koa-bodyparser": "^4.3.0",
     "koa-cookie": "^1.0.0",
     "koa-oas3": "^2.3.2",
