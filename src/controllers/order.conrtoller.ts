@@ -6,12 +6,14 @@ import Order from '../models/order.entity'
 import Dish from '../models/menu.entity'
 import CartPosition from '../models/cart.entity'
 import TimetobookEntity from '../models/timetobook.entity';
+import OrderDish from '../models/orderDish.entity'
 import BookedUsersEntity from "../models/bookedusers.entity";
 
 export default class OrderController {
     static async addOrder(ctx: Koa.Context) {
         const cartRepo: Repository<CartPosition> = getRepository(CartPosition)
         const orderRepo: Repository<Order> = getRepository(Order)
+        const dishesOrderRepo: Repository<OrderDish> = getRepository(OrderDish)
 
         const cart: CartPosition[] = await cartRepo.find({
             where: {
@@ -19,11 +21,8 @@ export default class OrderController {
             },
             relations: ['dish']
         })
-
-        const dishes: Dish[] = cart.map((current) => {
-            return current.dish
-        })
-
+        let dishes: OrderDish[] = dishesOrderRepo.create(cart)
+    
         const {type, date, time, price, paymentType, tableSize, address} = ctx.request.body
         const order: Order = orderRepo.create({
             user: ctx.params.user_id,
@@ -39,6 +38,17 @@ export default class OrderController {
         })
 
         await orderRepo.save(order)
+        const newDishes: OrderDish[] = dishes.map(val=> {
+            val.order = order
+            return val
+        })
+        
+        await dishesOrderRepo.save(newDishes)
+        await cartRepo.delete({
+            user: {
+                id: ctx.params.user_id
+            }
+        })
 
         ctx.body = {
             order
@@ -52,13 +62,41 @@ export default class OrderController {
             where: {
                 user: ctx.params.user_id,
             },
-            relations: ['user', 'dishes'],
+            relations: ['dishes'],
         })
         ctx.body = {
             orders
         }
     }
 
+    static async getDishes(ctx: Koa.Context) {
+        const dishesOrderRepo: Repository<OrderDish> = getRepository(OrderDish)
+        const dishes = await dishesOrderRepo.find(
+            {
+                where: {
+                    order: {
+                        id: ctx.params.order_id
+                    }
+                }, 
+                relations: [ 'dish', 'order']
+            }
+        )
+        ctx.body = {
+            dishes
+        }
+    }
+
+    static async getTimeForTakeaway(ctx: Koa.Context) {
+        const timeArray: Repository<TimetobookEntity> = getRepository(TimetobookEntity)
+        let time = await timeArray.find()
+        let availableTime = [...time.map((el) => {
+            return el.avalibletime
+        })]
+     ctx.body = {
+            availableTime
+        }
+    }
+  
     static async getAllOrders(ctx: Koa.Context) {
         const orderRepo: Repository<Order> = getRepository(Order)
         const orders: Order[] = await orderRepo.find()

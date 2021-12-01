@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from "typeorm"
 import CartPosition from "./cart.entity"
 import Order from "./order.entity"
+import OrderDish from "./orderDish.entity"
 
 type dishCategory = 'Плато' | 'Супы' | 'Салаты' | 'Запеченные устрицы' | 'Десерты'
 
@@ -33,6 +34,6 @@ export default class Dish {
     @OneToMany(() => CartPosition, cart => cart.dish)
     cartPositions?: CartPosition[]
 
-    @ManyToOne(() => Order, order => order.dishes, {cascade: true, onDelete: 'SET NULL'})
-    order: Order
+    @OneToMany(() => OrderDish, order => order.dish, {cascade: true, onDelete: 'SET NULL'})
+    order: OrderDish[]
 }
