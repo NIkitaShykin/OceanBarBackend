@@ -118,7 +118,7 @@ export default class UserController {
         newUser.refreshToken = tokens.refreshToken
         ctx.cookies.set('refreshToken',  tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
         await userRepo.save(newUser)
-        ctx.redirect(`${process.env.CLIENT_URL}login`)
+        ctx.redirect(`${process.env.CLIENT_URL}/login`)
         ctx.body = {
             data: newUser
         }
