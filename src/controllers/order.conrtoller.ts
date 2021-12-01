@@ -137,11 +137,27 @@ export default class OrderController {
         }
     }
 
+    static async deleteOrder(ctx: Koa.Context) {
+        const orderRepo: Repository<Order> = getRepository(Order)
+        const order: Order = await orderRepo.findOne({
+            where: {
+                id: ctx.params.order_id,
+            },
+            relations: ['user', 'dishes'],
+        })
+        if (!order) {
+            ctx.throw(HttpStatus.NOT_FOUND)
+        }
+        await orderRepo.delete(ctx.params.order_id)
+
+        ctx.status = HttpStatus.NO_CONTENT
+    }
+
     static async updateOrder(ctx: Koa.Context) {
         const orderRepo: Repository<Order> = getRepository(Order)
         const order: Order= await orderRepo.findOne({
             where: {
-                id: ctx.request.query.id
+                id: ctx.params.order_id
             }
         })
         if (!order) {
