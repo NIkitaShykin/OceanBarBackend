@@ -7,6 +7,7 @@ import Dish from '../models/menu.entity'
 import CartPosition from '../models/cart.entity'
 import TimetobookEntity from '../models/timetobook.entity';
 import OrderDish from '../models/orderDish.entity'
+import BookedUsersEntity from "../models/bookedusers.entity";
 
 export default class OrderController {
     static async addOrder(ctx: Koa.Context) {
@@ -72,16 +73,84 @@ export default class OrderController {
         const dishesOrderRepo: Repository<OrderDish> = getRepository(OrderDish)
         const dishes = await dishesOrderRepo.find(
             {
-                /* where: {
+                where: {
                     order: {
                         id: ctx.params.order_id
                     }
-                }, */
+                }, 
                 relations: [ 'dish', 'order']
             }
         )
         ctx.body = {
             dishes
+        }
+    }
+
+    static async getTimeForTakeaway(ctx: Koa.Context) {
+        const timeArray: Repository<TimetobookEntity> = getRepository(TimetobookEntity)
+        let time = await timeArray.find()
+        let availableTime = [...time.map((el) => {
+            return el.avalibletime
+        })]
+     ctx.body = {
+            availableTime
+        }
+    }
+  
+    static async getAllOrders(ctx: Koa.Context) {
+        const orderRepo: Repository<Order> = getRepository(Order)
+        const orders: Order[] = await orderRepo.find()
+        ctx.body = {
+            orders
+        }
+    }
+
+    static async deleteOrderAdmin(ctx: Koa.Context) {
+        const orderRepo: Repository<Order> = getRepository(Order)
+        const order: Order= await orderRepo.findOne({
+            where: {
+                id: ctx.params.order_id
+            }
+        })
+        if (!order) {
+            ctx.throw(HttpStatus.NOT_FOUND)
+        }
+        await orderRepo.delete(order)
+    
+        ctx.status = HttpStatus.NO_CONTENT
+    }
+
+    static async updateOrderAdmin(ctx: Koa.Context) {
+        const orderRepo: Repository<Order> = getRepository(Order)
+        const order: Order= await orderRepo.findOne({
+            where: {
+                id: ctx.params.order_id
+            }
+        })
+        if (!order) {
+            ctx.throw(HttpStatus.NOT_FOUND)
+        }
+        const updatedOrder = await orderRepo.merge(order, ctx.request.body)
+        await orderRepo.save(updatedOrder)
+        ctx.body = {
+            updatedOrder
+        }
+    }
+    
+    static async updateOrder(ctx: Koa.Context) {
+        const orderRepo: Repository<Order> = getRepository(Order)
+        const order: Order= await orderRepo.findOne({
+            where: {
+                id: ctx.request.query.id
+            }
+        })
+        if (!order) {
+            ctx.throw(HttpStatus.NOT_FOUND)
+        }
+        const updatedOrder = await orderRepo.merge(order, ctx.request.body)
+        await orderRepo.save(updatedOrder)
+        ctx.body = {
+            updatedOrder
         }
     }
 
@@ -115,41 +184,4 @@ export default class OrderController {
         }
     }
 
-    static async deleteOrder(ctx: Koa.Context) {
-        const orderRepo: Repository<Order> = getRepository(Order)
-
-        const order: Order = await orderRepo.findOne({
-            where: {
-                user: ctx.params.user_id,
-            },
-            relations: ['user', 'dishes'],
-        })
-
-        if (!order) {
-            ctx.throw(HttpStatus.NOT_FOUND)
-        }
-
-        await orderRepo.delete(ctx.params.order_id)
-        ctx.status = HttpStatus.NO_CONTENT
-    }
-
-    static async updateOrder(ctx: Koa.Context) {
-        const orderRepo: Repository<Order> = getRepository(Order)
-
-        const order: Order = await orderRepo.findOne({
-            where: {
-                id: ctx.params.order_id,
-            },
-            relations: ['user'],
-        })
-
-        if (!order) ctx.throw(HttpStatus.NOT_FOUND, 'No order found')
-        const updatedOrder: Order = await orderRepo.merge(order, ctx.request.body)
-        order.state === 'В процессе' ? updatedOrder.state = 'Выполнен' : updatedOrder.state = 'В процессе'
-        orderRepo.save(updatedOrder)
-
-        ctx.body = {
-            updatedOrder
-        }
-    }
 }
