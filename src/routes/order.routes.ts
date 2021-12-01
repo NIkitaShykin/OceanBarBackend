@@ -26,10 +26,5 @@ orderRouter.patch('/:order_id', authMiddleware, OrderController.updateOrder)
 /* // api/order/:order_id delete order from DB
 orderRouter.delete('/:order_id', authMiddleware, OrderController.deleteOrder)
  */
-orderRouter.get('/admin/', /* authMiddleware, adminMiddleware, */ OrderController.getAllOrders)
-
-orderRouter.patch('/admin/:order_id', /* authMiddleware, adminMiddleware, */ OrderController.getAllOrders)
-
-orderRouter.delete('/admin/:order_id', /* authMiddleware, adminMiddleware, */ OrderController.deleteOrderAdmin)
 
 export default orderRouter
