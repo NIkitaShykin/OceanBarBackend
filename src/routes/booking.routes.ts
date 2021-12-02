@@ -12,7 +12,7 @@ const bookingRouter: Router = new Router(routerOpts)
 bookingRouter.get('/', authMiddleware, adminMiddleware, BookingController.getBooking)
 bookingRouter.get('/usersbooking', authMiddleware, adminMiddleware, BookingController.getUsersBooking)
 bookingRouter.patch('/usersbooking', authMiddleware, adminMiddleware, BookingController.updateBooking)
-bookingRouter.post('/', authMiddleware, BookingController.createBooking)
+bookingRouter.post('/', BookingController.createBooking)
 bookingRouter.delete('/usersbooking', authMiddleware, adminMiddleware, BookingController.deleteUsersBooking)
 
 export default bookingRouter
