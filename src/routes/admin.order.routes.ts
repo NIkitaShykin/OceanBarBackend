@@ -8,10 +8,10 @@ const routerOpts: Router.IRouterOptions = {
 }
 
 const orderAdminRouter: Router = new Router(routerOpts)
-orderAdminRouter.get('/', /* authMiddleware, adminMiddleware, */ OrderController.getAllOrders)
+orderAdminRouter.get('/', authMiddleware, adminMiddleware, OrderController.getAllOrders)
 
-orderAdminRouter.patch('/:order_id', /* authMiddleware, adminMiddleware, */ OrderController.updateOrderAdmin)
+orderAdminRouter.patch('/:order_id', authMiddleware, adminMiddleware, OrderController.updateOrderAdmin)
 
-orderAdminRouter.delete('/:order_id', /* authMiddleware, adminMiddleware, */ OrderController.deleteOrderAdmin)
+orderAdminRouter.delete('/:order_id', authMiddleware, adminMiddleware, OrderController.deleteOrderAdmin)
 
 export default orderAdminRouter

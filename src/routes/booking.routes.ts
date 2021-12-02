@@ -1,5 +1,7 @@
 import * as Router from 'koa-router'
 import BookingController from "../controllers/booking.controller";
+import adminMiddleware from '../middlewares/admin.middleware';
+import authMiddleware from '../middlewares/auth.middleware';
 
 const routerOpts: Router.IRouterOptions = {
     prefix: '/api/booking'
@@ -7,10 +9,10 @@ const routerOpts: Router.IRouterOptions = {
 
 const bookingRouter: Router = new Router(routerOpts)
 // /api/cart/ get cart for user
-bookingRouter.get('/', /*authMiddleware*/ BookingController.getBooking)
-bookingRouter.get('/usersbooking', /*authMiddleware*/ BookingController.getUsersBooking)
-bookingRouter.patch('/usersbooking', /*authMiddleware*/ BookingController.updateBooking)
-bookingRouter.post('/', /*authMiddleware*/ BookingController.createBooking)
-bookingRouter.delete('/usersbooking', /*authMiddleware*/ BookingController.deleteUsersBooking)
+bookingRouter.get('/', authMiddleware, adminMiddleware, BookingController.getBooking)
+bookingRouter.get('/usersbooking', authMiddleware, adminMiddleware, BookingController.getUsersBooking)
+bookingRouter.patch('/usersbooking', authMiddleware, adminMiddleware, BookingController.updateBooking)
+bookingRouter.post('/', authMiddleware, BookingController.createBooking)
+bookingRouter.delete('/usersbooking', authMiddleware, adminMiddleware, BookingController.deleteUsersBooking)
 
 export default bookingRouter
