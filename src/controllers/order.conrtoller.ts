@@ -87,14 +87,6 @@ export default class OrderController {
         }
     }
 
-    static async getAllOrders(ctx: Koa.Context) {
-        const orderRepo: Repository<Order> = getRepository(Order)
-        const orders: Order[] = await orderRepo.find()
-        ctx.body = {
-            orders
-        }
-    }
-
     // static async deleteOrderAdmin(ctx: Koa.Context) {
     //     const orderRepo: Repository<Order> = getRepository(Order)
     //     const order: Order= await orderRepo.findOne({
